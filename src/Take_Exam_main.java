@@ -644,7 +644,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			this.setContentPane(setQuestionPane(level,"test_set"));
 			this.setVisible(true);
 		}
-		//------------ˆê”Ô‰º‚ÉˆÚ“®-----------------------------------
+		//-----------------------------------------------
 		time.setText("§ŒÀŽžŠÔF"+max+"sec Œo‰ßŽžŠÔF"+ sec + " sec");
 
 	    if (sec >= max){

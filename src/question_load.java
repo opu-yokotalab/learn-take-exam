@@ -120,9 +120,23 @@ public class question_load {
 	    
 	    //DBからの呼び出し
 	    String driver = "org.postgresql.Driver";
+	    //どこのDBに接続するかの判定(0:ローカル、1:emerald)
+	    int DB_C = 0;
+
+	    //デフォルトはローカルホストへのアクセス
 	    String url = "jdbc:postgresql://127.0.0.1:5432/problem_DB";
 	    String user = "postgres";
 	    String pass = "postgres";
+	    
+	    if(DB_C == 0){
+	    }
+	    
+	    else if(DB_C == 1){
+	    	//サーバ(emerald.c.oka-pu.ac.jp)へのアクセス
+	    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB";
+	    	user = "ariyasu";
+	    	pass = "flyinggarnet";
+	    }
 	    
 	    try {
 	        // ドライバクラスをロード
@@ -172,7 +186,12 @@ public class question_load {
 		        // ドキュメントビルダーを生成
 		        DocumentBuilder parser = dbfactory.newDocumentBuilder();	           
 		        // パースを実行してDocumentオブジェクトを取得
+		        //ローカルDBのとき
 		        Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        if(DB_C == 1){
+		        	//emerald上のDBにアクセスするとき
+		        	doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
+		        }
 		        //Document doc = parser.parse(stream);
 		        //System.out.println("DB conect OK8");//DB接続チェック
 		        // ルート要素を取得
@@ -191,9 +210,6 @@ public class question_load {
 			    	  for(int j=0;j<clist.getLength();j++){
 			    		  if(clist.item(j).getNodeValue()!=null){
 			    			  questiontext = questiontext+clist.item(j).getNodeValue();
-			    			  //if(questiontext.length()>15){
-			    			  //  String div = questiontext;
-			    			  //}
 			    		  }
 			    	  }
 			    	  //pre以下の問題のソースコードを取得

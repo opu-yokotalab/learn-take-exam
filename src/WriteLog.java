@@ -5,14 +5,35 @@ public class WriteLog {
 //DBへのログ書き込みクラス	
 	
 	WriteLog(String username,int judg,String seq,int order,String program_set,int p_ID,int q_lev,java.sql.Timestamp start,java.sql.Timestamp end){
-    //DBからの呼び出し
+    
+	String uname = username;
+		
+	int DB_C=1;
+		
     String driver = "org.postgresql.Driver";
+    
     String url = "jdbc:postgresql://127.0.0.1:5432/problem_DB";
     String user = "postgres";
     String pass = "postgres";
     
+    if(DB_C == 1){
+    	//サーバ(emerald.c.oka-pu.ac.jp)へのアクセス
+    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB";
+    	user = "ariyasu";
+    	pass = "flyinggarnet";
+    	
+
+    }
+    
     try {
-        // ドライバクラスをロード
+    	//if(DB_C ==1){
+    		//byte[] eucBytes = username.getBytes("EUC_JP");
+    		//System.out.println(eucBytes);
+    		//String in = new String(eucBytes,"EUC_JP");
+    		//String in = new String(username.getBytes("EUC_JP"));
+    		//uname = in;
+    	//}
+    	// ドライバクラスをロード
         Class.forName(driver); // PostgreSQLの場合
         // データベースへ接続
 
@@ -21,7 +42,7 @@ public class WriteLog {
         // ステートメントオブジェクトを生成
         Statement stmt = con.createStatement();
         String sql = "INSERT INTO user_log VALUES('"
-        	+ username + "','" + judg + "','" + seq + "','"  + order + "','" 
+        	+ uname + "','" + judg + "','" + seq + "','"  + order + "','" 
         	+ program_set +"','"+ p_ID +"','"+q_lev +"',to_TIMESTAMP('" + start+ "','yyyy/mm/dd hh24:mi:ss:nnn'),to_TIMESTAMP('" 
         	+ end +"','yyyy/mm/dd hh24:mi:ss:nnn'));";
         //System.out.println(sql);
