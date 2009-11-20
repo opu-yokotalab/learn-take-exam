@@ -28,7 +28,7 @@ public class question_load {
 	ArrayList max_time;
 	ArrayList length;
 	
-	question_load(int lev,String p_set){
+	question_load(int lev,String p_set,int order,int full_order){
 	
 		int i;
 		String questiontext = new String();
@@ -128,10 +128,8 @@ public class question_load {
 	    String user = "postgres";
 	    String pass = "postgres";
 	    
-	    if(DB_C == 0){
-	    }
 	    
-	    else if(DB_C == 1){
+	    if(DB_C == 1){
 	    	//サーバ(emerald.c.oka-pu.ac.jp)へのアクセス
 	    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB";
 	    	user = "ariyasu";
@@ -147,11 +145,203 @@ public class question_load {
 	    	//System.out.println("DB conect OK3");//DB接続チェック
 	        // ステートメントオブジェクトを生成
 	        Statement stmt = con.createStatement();
+	        
+	        
 	        //String sql = "SELECT source FROM question WHERE program_set = \"sample\" AND id= \"1\";";
 	        //レベルとプログラムセットを指定して問題のリストを得る
 	        String sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+";";
 	        ResultSet rs = stmt.executeQuery(sql);
+	        int id=1;
 	        
+	        //完全に出すもの指定
+	        if(full_order==1){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct2";
+	        		id = 14;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct2";
+	        		id = 23;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 16;
+	        	}
+	        }else if(full_order==2){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct";
+	        		id = 6;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct3";
+	        		id = 26;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 18;
+	        	}
+	        }else if(full_order==3){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct3";
+	        		id = 33;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct";
+	        		id = 4;
+	        	}else {//struct3
+	        		p_set = "struct3";
+	        		id = 34;
+	        	}
+	        }else if(full_order==4){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct2";
+	        		id = 20;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct2";
+	        		id = 17;
+	        	}else {//struct3
+	        		p_set = "struct3";
+	        		id = 27;
+	        	}
+	        }else if(full_order==5){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct";
+	        		id = 13;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct";
+	        		id = 12;
+	        	}else {//struct3
+	        		p_set = "struct";
+	        		id = 5;
+	        	}
+	        }else if(full_order==6){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct3";
+	        		id = 25;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct";
+	        		id = 1;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 24;
+	        	}
+	        }else if(full_order==7){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct";
+	        		id = 7;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct3";
+	        		id = 28;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 21;
+	        	}
+	        }
+	        
+	        /*//1問目と2問目だけは指定した問題を出すように
+	        //1問目
+	        if(order==1){
+	        	//Lv.1
+	        	if(lev==1){
+	        		if(p_set.equals("struct")){
+	        			id=1;
+	        		}else if(p_set.equals("struct2")){
+	        			id=14;
+	        		}else if(p_set.equals("struct3")){
+	        			id=25;
+	        		}else if (p_set.equals("pointer")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=4;
+	        		}
+	        	}
+	        	//Lv.2
+	        	else if (lev == 2){
+	        		if(p_set.equals("struct")){
+	        			id=7;
+	        		}else if(p_set.equals("struct2")){
+	        			id=20;
+	        		}else if(p_set.equals("struct3")){
+	        			id=26;
+	        			//id=1;//金子研究用（簡単すぎる問題）
+	        			//p_set = "struct";
+	        		}else if (p_set.equals("pointer")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=4;
+	        		}
+	        	}
+	        	//Lv.3
+	        	else if (lev == 3){
+	        		if(p_set.equals("struct")){
+	        			id=12;
+	        		}else if(p_set.equals("struct2")){
+	        			id=18;
+	        		}else if(p_set.equals("struct3")){
+	        			id=33;
+	        		}else if (p_set.equals("pointer")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=4;
+	        		}
+	        	}
+	        //2問目
+	        }else if(order==2){
+	        	//Lv.1
+	        	if(lev==1){
+	        		if(p_set.equals("struct")){
+	        			id=6;
+	        		}else if(p_set.equals("struct2")){
+	        			id=17;
+	        			//id=33;//金子研究用（難しい問題）
+	        			//p_set = "struct3";
+	        		}else if(p_set.equals("struct3")){
+	        			id=27;
+	        		}else if (p_set.equals("pointer")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=4;
+	        		}
+	        	}
+	        	//Lv.2
+	        	else if (lev == 2){
+	        		if(p_set.equals("struct")){
+	        			id=4;
+	        			//id=34;//金子研究用（難しすぎる問題)
+	        			//p_set = "struct3";
+	        		}else if(p_set.equals("struct2")){
+	        			id=16;
+	        		}else if(p_set.equals("struct3")){
+	        			id=28;
+	        		}else if (p_set.equals("pointer")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=4;
+	        		}
+	        	}
+	        	//Lv.3
+	        	else if (lev == 3){
+	        		if(p_set.equals("struct")){
+	        			id=13;
+	        		}else if(p_set.equals("struct2")){
+	        			id=23;
+	        		}else if(p_set.equals("struct3")){
+	        			id=34;
+	        		}else if (p_set.equals("pointer")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=4;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=4;
+	        		}
+	        	}
+	        }else{
+	        //同レベルで2問目以降はランダムで出題
 	        ArrayList idlist = new ArrayList();
 	        while (rs.next()){
 	        	//System.out.println("id:"+rs.getInt("program_ID"));	
@@ -160,14 +350,17 @@ public class question_load {
 	        int listsize = idlist.size();
 	        //System.out.println("listsize:"+listsize);
 	        //int p_id = (int)Math.ceil(listsize * Math.random());
-	        int p_id = (int)(listsize * Math.random());
+	        int p_id = (int)(listsize * Math.random());//乱数を与えて何個目の問題を出すか決定
 	        //System.out.println("p_id:"+p_id);
-	        int id = Integer.parseInt(idlist.get(p_id).toString());
+	        id = Integer.parseInt(idlist.get(p_id).toString());//何個目かを実際のp_idに変換
 	        //System.out.println("id:"+id);
+	        }*/
 	        qID.add(id);
 	        
+	        //問題文を取得
 	        //sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+";";
-	        sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+" AND program_ID="+id+";";
+	        //sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+" AND program_ID="+id+";";
+	        sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND program_ID="+id+";";
 	        rs = stmt.executeQuery(sql);
 	        //String sql = "SELECT source FROM question where program_set=\'sample\' AND id=1;";
 	        // クエリーを実行して結果セットを取得
@@ -187,7 +380,11 @@ public class question_load {
 		        DocumentBuilder parser = dbfactory.newDocumentBuilder();	           
 		        // パースを実行してDocumentオブジェクトを取得
 		        //ローカルDBのとき
+		        //Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
 		        Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        if(DB_C == 0){
+		        	doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        }
 		        if(DB_C == 1){
 		        	//emerald上のDBにアクセスするとき
 		        	doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
