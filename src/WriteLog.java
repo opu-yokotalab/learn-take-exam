@@ -8,7 +8,7 @@ public class WriteLog {
     
 	String uname = username;
 		
-	int DB_C=0;
+	int DB_C=1;
 		
     String driver = "org.postgresql.Driver";
     

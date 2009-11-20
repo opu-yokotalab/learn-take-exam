@@ -121,7 +121,7 @@ public class question_load {
 	    //DBからの呼び出し
 	    String driver = "org.postgresql.Driver";
 	    //どこのDBに接続するかの判定(0:ローカル、1:emerald)
-	    int DB_C = 0;
+	    int DB_C = 1;
 
 	    //デフォルトはローカルホストへのアクセス
 	    String url = "jdbc:postgresql://127.0.0.1:5432/problem_DB";
@@ -154,7 +154,7 @@ public class question_load {
 	        int id=1;
 	        
 	        //完全に出すもの指定
-	        if(full_order==1){
+	        /*if(full_order==1){
 	        	if(p_set.equals("struct")){
 	        		p_set = "struct2";
 	        		id = 14;
@@ -231,9 +231,9 @@ public class question_load {
 	        		p_set = "struct2";
 	        		id = 21;
 	        	}
-	        }
+	        }*/
 	        
-	        /*//1問目と2問目だけは指定した問題を出すように
+	        //1問目と2問目だけは指定した問題を出すように
 	        //1問目
 	        if(order==1){
 	        	//Lv.1
@@ -354,7 +354,7 @@ public class question_load {
 	        //System.out.println("p_id:"+p_id);
 	        id = Integer.parseInt(idlist.get(p_id).toString());//何個目かを実際のp_idに変換
 	        //System.out.println("id:"+id);
-	        }*/
+	        }
 	        qID.add(id);
 	        
 	        //問題文を取得
@@ -380,8 +380,8 @@ public class question_load {
 		        DocumentBuilder parser = dbfactory.newDocumentBuilder();	           
 		        // パースを実行してDocumentオブジェクトを取得
 		        //ローカルDBのとき
-		        //Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
-		        Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
+		        //Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
 		        if(DB_C == 0){
 		        	doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
 		        }
