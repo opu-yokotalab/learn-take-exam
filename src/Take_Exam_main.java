@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.Timer;
 //import java.sql.*;
 
+
+
 public class Take_Exam_main extends JFrame implements ActionListener{
 //メインの提示・処理を行うクラス
 	
@@ -67,11 +69,18 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	 * This is the default constructor
 	 */
 	public Take_Exam_main() {
+	//public void main(){
 		//super();
 		initialize();
 		this.setVisible(true);
 	}
-
+	public static void main(String[] args) {
+	//public void main(){
+		Take_Exam_main TE = new Take_Exam_main();
+		//initialize();
+		//this.setVisible(true);
+	}
+	
 	/**
 	 * This method initializes this
 	 * 
@@ -82,6 +91,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		this.setContentPane(getJContentPane());
 		//this.setContentPane(setQuestionPane());
 		this.setTitle("演習システム");
+		//this.setVisible(true);
 	}
 
 	/**
@@ -210,9 +220,9 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	private JPanel setQuestionPane(int level,String p_set){
 	//出題画面
 		//if (setQuestionPane == null) {
-			setQuestionPane = new JPanel();
-			//jContentPane.setSize(350, 400);
-			setQuestionPane.setLayout(new BorderLayout());
+		setQuestionPane = new JPanel();
+		//jContentPane.setSize(350, 400);
+		setQuestionPane.setLayout(new BorderLayout());
 		//}
 		
 		JPanel infoPanel = new JPanel();//情報提示用のパネル
@@ -240,7 +250,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		//問題文の配置
 		//System.out.println("question:"+QL.question.get(0).toString());
 		JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
-		qTA.setSize(200, 300);
+		qTA.setSize(500, 400);
 		qTA.setEditable(false);//書き込み不可にする
 		//qTA.setBackground(UIManager.getColor("control"));//BGColorを周りと同じに
 		qPanel.add(qTA);//テキストエリアをパネルに追加
@@ -580,7 +590,6 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			seqence = "struct";
 			//this.setContentPane(setQuestionPane(level,"test_set"));
 			this.setContentPane(setQuestionPane(level,seqence));
-
 			//時間取得
 			Calendar now = Calendar.getInstance(); //インスタンス化
 			
@@ -608,7 +617,9 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			
 			//ユーザ名の取得
 			user_name = get_user_name.getText();
+			
 			//System.out.println("user_name:"+user_name); 
+			//this.setContentPane(setQuestionPane(level,seqence));
 			this.setVisible(true);
 		}
 		if (e.getActionCommand() == "START2" ){
@@ -684,7 +695,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			sec =0;
 			//ord = 1;
 			//seqence = "pointer";
-			seqence = "test_set";
+			seqence = "pointer";
 			//this.setContentPane(setQuestionPane(level,"test_set"));
 			this.setContentPane(setQuestionPane(level,seqence));
 
@@ -719,7 +730,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			sec =0;
 			//ord = 1;
 			//seqence = "pointer";
-			seqence = "test_set";
+			seqence = "pointer2";
 			//this.setContentPane(setQuestionPane(level,"test_set"));
 			this.setContentPane(setQuestionPane(level,seqence));
 
@@ -754,7 +765,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			sec =0;
 			//ord = 1;
 			//seqence = "pointer";
-			seqence = "test_set";
+			seqence = "pointer3";
 			//this.setContentPane(setQuestionPane(level,"test_set"));
 			this.setContentPane(setQuestionPane(level,seqence));
 

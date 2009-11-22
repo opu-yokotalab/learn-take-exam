@@ -245,11 +245,11 @@ public class question_load {
 	        		}else if(p_set.equals("struct3")){
 	        			id=25;
 	        		}else if (p_set.equals("pointer")){
-	        			id=4;
+	        			id=41;
 	        		}else if (p_set.equals("pointer2")){
-	        			id=4;
+	        			id=46;
 	        		}else if (p_set.equals("pointer3")){
-	        			id=4;
+	        			id=58;
 	        		}
 	        	}
 	        	//Lv.2
@@ -260,14 +260,16 @@ public class question_load {
 	        			id=20;
 	        		}else if(p_set.equals("struct3")){
 	        			id=26;
-	        			//id=1;//金子研究用（簡単すぎる問題）
-	        			//p_set = "struct";
 	        		}else if (p_set.equals("pointer")){
-	        			id=4;
+	        			id=37;
 	        		}else if (p_set.equals("pointer2")){
-	        			id=4;
+	        			//id=48;
+	        			id=60;//金子研究用難しすぎる問題
+	        			p_set = "pointer3";
 	        		}else if (p_set.equals("pointer3")){
-	        			id=4;
+	        			//id=60;
+	        			id=35;//金子研究用（簡単すぎる問題）
+	        			p_set = "pointer";
 	        		}
 	        	}
 	        	//Lv.3
@@ -279,11 +281,13 @@ public class question_load {
 	        		}else if(p_set.equals("struct3")){
 	        			id=33;
 	        		}else if (p_set.equals("pointer")){
-	        			id=4;
+	        			id=36;
 	        		}else if (p_set.equals("pointer2")){
-	        			id=4;
+	        			id=52;
 	        		}else if (p_set.equals("pointer3")){
-	        			id=4;
+	        			//id=66;
+	        			id=44;//金子研究用（簡単すぎる問題）
+	        			p_set = "pointer";
 	        		}
 	        	}
 	        //2問目
@@ -294,34 +298,35 @@ public class question_load {
 	        			id=6;
 	        		}else if(p_set.equals("struct2")){
 	        			id=17;
-	        			//id=33;//金子研究用（難しい問題）
-	        			//p_set = "struct3";
+	        			
 	        		}else if(p_set.equals("struct3")){
 	        			id=27;
 	        		}else if (p_set.equals("pointer")){
-	        			id=4;
+	        			//id=35;
+	        			id=48;//金子研究用（難しい問題）
+	        			p_set = "pointer2";
 	        		}else if (p_set.equals("pointer2")){
-	        			id=4;
+	        			id=47;
 	        		}else if (p_set.equals("pointer3")){
-	        			id=4;
+	        			id=64;
 	        		}
 	        	}
 	        	//Lv.2
 	        	else if (lev == 2){
 	        		if(p_set.equals("struct")){
 	        			id=4;
-	        			//id=34;//金子研究用（難しすぎる問題)
-	        			//p_set = "struct3";
 	        		}else if(p_set.equals("struct2")){
 	        			id=16;
 	        		}else if(p_set.equals("struct3")){
 	        			id=28;
 	        		}else if (p_set.equals("pointer")){
-	        			id=4;
+	        			//id=44;
+	        			id=66;//金子研究用（難しすぎる問題)
+	        			p_set = "pointer3";
 	        		}else if (p_set.equals("pointer2")){
-	        			id=4;
+	        			id=50;
 	        		}else if (p_set.equals("pointer3")){
-	        			id=4;
+	        			id=67;
 	        		}
 	        	}
 	        	//Lv.3
@@ -333,11 +338,11 @@ public class question_load {
 	        		}else if(p_set.equals("struct3")){
 	        			id=34;
 	        		}else if (p_set.equals("pointer")){
-	        			id=4;
+	        			id=37;
 	        		}else if (p_set.equals("pointer2")){
-	        			id=4;
+	        			id=55;
 	        		}else if (p_set.equals("pointer3")){
-	        			id=4;
+	        			id=65;
 	        		}
 	        	}
 	        }else{
