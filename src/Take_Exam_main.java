@@ -1,6 +1,7 @@
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 //import java.awt.Color;
+//import java.awt.BorderLayout;
+//import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -25,6 +26,9 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	public static question_load QL;  //  問題読み出し  //  @jve:decl-index=0:
 	public static WriteLog WL; //ログ書きこみ
 	
+	//デフォルトフォント
+	Font defFont = new Font("monospaced", Font.PLAIN, 16);
+	
 	//出題関係
 	JTextField[] answer = new JTextField[10];//回答欄
 	JTextField get_user_name = new JTextField(15);//ユーザーネーム取得欄
@@ -37,6 +41,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	int max_ord = 7;
 	int level = 1; //レベル
 	int max_level = 3;//最大レベル
+	ArrayList ready;  //  @jve:decl-index=0:
 	JLabel time = new JLabel();
 	Timer timer;  //  @jve:decl-index=0:
 	int sec=0;
@@ -65,6 +70,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	java.sql.Timestamp endDate;  // 回答完了時間
 	java.sql.Timestamp startTime;
 	java.sql.Timestamp endTime;
+	java.sql.Timestamp takeTime;  //  @jve:decl-index=0:
 	/**
 	 * This is the default constructor
 	 */
@@ -74,12 +80,14 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		initialize();
 		this.setVisible(true);
 	}
-	public static void main(String[] args) {
+	
+	/*public void main(String[] args) {
 	//public void main(){
 		Take_Exam_main TE = new Take_Exam_main();
 		//initialize();
-		//this.setVisible(true);
-	}
+		TE.setVisible(true);
+	}*/
+	
 	
 	/**
 	 * This method initializes this
@@ -87,7 +95,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	 * @return void
 	 */
 	private void initialize() {//初期化
-		this.setSize(900, 800);
+		this.setSize(1000, 750);
 		this.setContentPane(getJContentPane());
 		//this.setContentPane(setQuestionPane());
 		this.setTitle("演習システム");
@@ -121,6 +129,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		co_mi =0;//連続間違い数
 		to_co =0;//合計正解数
 		to_mi =0;//合計間違い数
+		ready = new ArrayList();
 		
 		//ユーザ名入力
 		JLabel un = new JLabel("ユーザー名");
@@ -134,7 +143,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		s.add(sLab);
 		seqPanel.add(s);
 		
-		//シーケンスボタン1
+		/*//シーケンスボタン1
 		s = new JPanel();
 		//JLabel sLab = new JLabel("配列");
 		sLab = new JLabel("構造体1");
@@ -210,8 +219,60 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		startB.addActionListener(this);
 		//qPanel.setSize(300, 400);
 		s.add(startB);
+		seqPanel.add(s);*/
+		
+		//シーケンスボタン7
+		s = new JPanel();
+		//JLabel sLab = new JLabel("配列");
+		sLab = new JLabel("テスト1回目：その１");
+		//sLab = new JLabel("For文");
+		s.add(sLab);
+		JButton startB = new JButton("学習を始める");
+		startB.setActionCommand("START7");
+		startB.addActionListener(this);
+		//qPanel.setSize(300, 400);
+		s.add(startB);
 		seqPanel.add(s);
-			
+		
+		//シーケンスボタン8
+		s = new JPanel();
+		//JLabel sLab = new JLabel("ポインタ");
+		sLab = new JLabel("テスト1回目：その2");
+		s.add(sLab);
+		//JButton startB = new JButton("学習を始める");
+		startB = new JButton("学習を始める");
+		startB.setActionCommand("START8");
+		startB.addActionListener(this);
+		//qPanel.setSize(300, 400);
+		s.add(startB);
+		seqPanel.add(s);
+		
+		//シーケンスボタン9
+		s = new JPanel();
+		//JLabel sLab = new JLabel("配列");
+		sLab = new JLabel("テスト2回目：その１");
+		//sLab = new JLabel("For文");
+		s.add(sLab);
+		startB = new JButton("学習を始める");
+		startB.setActionCommand("START9");
+		startB.addActionListener(this);
+		//qPanel.setSize(300, 400);
+		s.add(startB);
+		seqPanel.add(s);
+		
+		//シーケンスボタン10
+		s = new JPanel();
+		//JLabel sLab = new JLabel("ポインタ");
+		sLab = new JLabel("テスト2回目：その2");
+		s.add(sLab);
+		//JButton startB = new JButton("学習を始める");
+		startB = new JButton("学習を始める");
+		startB.setActionCommand("START10");
+		startB.addActionListener(this);
+		//qPanel.setSize(300, 400);
+		s.add(startB);
+		seqPanel.add(s);
+		
 		startPanel.add(seqPanel,BorderLayout.CENTER);
 		jContentPane.add(startPanel, BorderLayout.CENTER);
 		return jContentPane;
@@ -230,7 +291,8 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		JPanel bPanel = new JPanel();//ボタン提示用パネル
 		JPanel aPanel = new JPanel();//解答欄提示用パネル
 		
-		QL = new question_load(level,p_set,small_ord,ord);
+		//QL = new question_load(level,p_set,small_ord,ord,ready);
+		QL = new question_load(level,p_set,small_ord,ord,ready);
 		
 		//問題情報の提示
 		JLabel order = new JLabel ("第"+ord+"問目  ");
@@ -238,10 +300,10 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		//level = Integer.parseInt(QL.level.get(0).toString());
 		JLabel l = new JLabel("Level:"+level);
 		infoPanel.add(l);
-		JLabel qid = new JLabel("問題ID："+QL.qID.get(0).toString());
-		infoPanel.add(qid);
-		JLabel ps = new JLabel("Program_set:"+QL.program_set.get(0).toString());
-		infoPanel.add(ps);
+		//JLabel qid = new JLabel("問題ID："+QL.qID.get(0).toString());
+		//infoPanel.add(qid);
+		//JLabel ps = new JLabel("Program_set:"+QL.program_set.get(0).toString());
+		//infoPanel.add(ps);
 		infoPanel.add(time);
 		timer = new Timer(1000,this);
 		timer.start();
@@ -249,28 +311,29 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		
 		//問題文の配置
 		//System.out.println("question:"+QL.question.get(0).toString());
-		JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
-		qTA.setSize(500, 400);
+		//JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
+		JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+		
+		//scrollpane.setLocation(0,0);
+		//scrollpane.setBounds(10,10,50,50);
+		qTA.setText(QL.question.get(0).toString());
+		//qTA.setFont(new Font("BOLD", Font.PLAIN,16));
+		qTA.setFont(defFont);
+		//qTA.setSize(500, 400);
+		//qTA.setSize(300,200);
 		qTA.setEditable(false);//書き込み不可にする
 		//qTA.setBackground(UIManager.getColor("control"));//BGColorを周りと同じに
-		qPanel.add(qTA);//テキストエリアをパネルに追加
+		//qPanel.add(qTA);//テキストエリアをパネルに追加
+		JScrollPane scrollpane = new JScrollPane(qTA);//スクロールバー
+		//JViewport view = scrollpane.getViewport();
+		//view.setViewPosition(new Point(0,0));
+		qPanel.add(scrollpane);//テキストエリアをパネルに追加
 		
-		//ボタンの配置
-		JButton ans = new JButton("採点");//採点ボタン
-		ans.setActionCommand("ANSWER");
-		ans.addActionListener(this);
-		bPanel.add(ans);
-		JButton g_up = new JButton("GIVE UP");//Give up ボタン
-		g_up.setActionCommand("GIVEUP");
-		g_up.addActionListener(this);
-		bPanel.add(g_up);		
-		/*JButton hints = new JButton("HINT");//ヒントボタン
-		hints.setActionCommand("HINT");
-		hints.addActionListener(this);
-		bPanel.add(hints);*/
+
 		
 		//解答欄の配置
-		aPanel.setLayout(new GridLayout(QL.blank.size(),1));
+		//aPanel.setLayout(new GridLayout(QL.blank.size(),1));
+		aPanel.setLayout(new GridLayout(10,1));
 		for(int i=0;i<QL.blank.size();i++){
 			JPanel form = new JPanel();
 			JLabel resp = new JLabel(QL.blank.get(i).toString());
@@ -278,9 +341,37 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			answer[i] = new JTextField(15);
 			answer[i].setName(QL.blank.get(i).toString());
 			form.add(answer[i]);
-			aPanel.add(form,i,0);
+			//aPanel.add(form,i,0);
+			aPanel.add(form);
 		}
 
+		JLabel space = new JLabel("                     ");
+		//bPanel.add(space);
+		aPanel.add(space);
+		
+		//ボタンの配置
+		JButton ans = new JButton("採点");//採点ボタン
+		ans.setActionCommand("ANSWER");
+		ans.addActionListener(this);
+		//bPanel.add(ans);
+		JPanel ansPanel = new JPanel();
+		ansPanel.add(ans);
+		aPanel.add(ansPanel);
+		
+		aPanel.add(space);
+		
+		JButton g_up = new JButton("GIVE UP");//Give up ボタン
+		g_up.setActionCommand("GIVEUP");
+		g_up.addActionListener(this);
+		//bPanel.add(g_up);
+		JPanel g_upPanel = new JPanel();
+		g_upPanel.add(g_up);
+		aPanel.add(g_upPanel);
+		/*JButton hints = new JButton("HINT");//ヒントボタン
+		hints.setActionCommand("HINT");
+		hints.addActionListener(this);
+		bPanel.add(hints);*/
+		
 		//レベルの取得
 		//level = Integer.parseInt(QL.level.get(0).toString());
 		//System.out.println("blank:"+QL.blank.size());
@@ -306,7 +397,12 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			small_ord++;
 			
 			JPanel infoPanel = new JPanel();//情報提示用のパネル
+			//infoPanel.setFont(defFont);
+			JPanel mPanel = new JPanel();//問題文提示用パネル
+			
 			JPanel aPanel = new JPanel();//解答提示用のパネル
+			aPanel.setLayout(new GridLayout(10,1));
+			//aPanel.setFont(defFont);
 			//aPanel.setLayout(new GridLayout(4,1));
 			JPanel bPanel = new JPanel();//ボタン提示用パネル
 			int flag = 0;
@@ -317,12 +413,32 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			//JLabel l = new JLabel("Level:"+QL.level.get(0).toString());
 			JLabel l = new JLabel("Level:"+level);
 			infoPanel.add(l);
+			
+			
+			//問題文の配置
+			//System.out.println("question:"+QL.question.get(0).toString());
+			//JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
+			JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+			
+			JScrollPane scrollpane = new JScrollPane(qTA);//スクロールバー
+			//scrollpane.setLocation(0,0);
+			//scrollpane.setBounds(10,10,50,50);
+			qTA.setText(QL.question.get(0).toString());
+			//qTA.setFont(new Font("BOLD", Font.PLAIN,16));
+			qTA.setFont(defFont);
+			//qTA.setSize(500, 400);
+			//qTA.setSize(300,200);
+			qTA.setEditable(false);//書き込み不可にする
+			//qTA.setBackground(UIManager.getColor("control"));//BGColorを周りと同じに
+			//qPanel.add(qTA);//テキストエリアをパネルに追加
+			mPanel.add(scrollpane);//テキストエリアをパネルに追加
+			
 			//JLabel qid = new JLabel("問題ID："+QL.qID.get(0).toString());
-			JLabel qid = new JLabel("問題ID："+ID);
-			infoPanel.add(qid);
+			//JLabel qid = new JLabel("問題ID："+ID);
+			//infoPanel.add(qid);
 			//JLabel ps = new JLabel("Program_set:"+QL.program_set.get(0).toString());
-			JLabel ps = new JLabel("Program_set:"+p_set);
-			infoPanel.add(ps);
+			//JLabel ps = new JLabel("Program_set:"+p_set);
+			//infoPanel.add(ps);
 			
 			//int end1 = Integer.parseInt(QL.length.get(0).toString());
 			int end = ans.size();
@@ -334,11 +450,18 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 					flag =1;
 				}
 			}
-			JLabel hantei = new JLabel("判定：");
-			aPanel.add(hantei);
+			//JLabel hantei = new JLabel("判定：");
+			//aPanel.add(hantei);
+			String hantei = new String ("判定：");
 			//System.out.println("level:"+level);
 			if(flag == 0){
-				JLabel sei = new JLabel("○：正解！！");
+				//JLabel sei = new JLabel("○：正解！！");
+				
+				hantei = hantei + "○  正解！！";
+				JLabel sei = new JLabel(hantei,SwingConstants.CENTER);
+				sei.setFont(defFont);
+				sei.setForeground(Color.red);
+				//sei.setAlignment(new SWT.CENTER); 
 				aPanel.add(sei);
 				//JLabel a = new JLabel(QL.supplementation.get(0).toString());
 				//aPanel.add(a);
@@ -376,7 +499,10 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				}
 				
 			}else{
-				JLabel go = new JLabel("×:不正解！！");
+				hantei = hantei + "×  不正解！！";
+				JLabel go = new JLabel(hantei,SwingConstants.CENTER);
+				go.setFont(defFont);
+				go.setForeground(Color.blue);
 				aPanel.add(go);
 
 				//System.out.println("×:不正解！！");
@@ -410,27 +536,67 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				
 			}
 			//あなたの回答提示
-			JLabel you = new JLabel("あなたの回答");
-			aPanel.add(you);
+			String you = new String();
+			JLabel y = new JLabel("あなたの回答",SwingConstants.CENTER);
+			y.setFont(defFont);
+			aPanel.add(y);
 			for(int i=0;i<end;i++){
-				JLabel yourA = new JLabel((i+1)+":"+ans.get(i).toString());
-				aPanel.add(yourA);
+				you = you + (i+1)+":"+ans.get(i).toString()+"  ";
+				//JLabel yourA = new JLabel((i+1)+":"+ans.get(i).toString());
+				//aPanel.add(yourA);
 			}
+			JLabel yourA = new JLabel(you,SwingConstants.CENTER);
+			yourA.setFont(defFont);
+			aPanel.add(yourA);
+			
 			//模範解答提示
-			JLabel kai = new JLabel("模範解答");
-			aPanel.add(kai);
+			String kai = new String();
+			JLabel k = new JLabel("模範解答",SwingConstants.CENTER);
+			k.setFont(defFont);
+			aPanel.add(k);
 			for(int i=0;i<end;i++){
-				JLabel mohan = new JLabel((i+1)+":"+QL.answer.get(i).toString());
-				aPanel.add(mohan);
+				kai = kai + (i+1) + ":" + QL.answer.get(i).toString() + "  ";
+				//JLabel mohan = new JLabel((i+1)+":"+QL.answer.get(i).toString());
+				//aPanel.add(mohan);
 			}
-			JLabel a = new JLabel(QL.supplementation.get(0).toString());
+			JLabel mohan = new JLabel(kai,SwingConstants.CENTER);
+			mohan.setFont(defFont);
+			aPanel.add(mohan);
+			
+			//回答にかかった時間
+			//JLabel time = new JLabel("回答にかかった時間");
+			//aPanel.add(time);
+			//int t = endTime.compareTo(startTime);
+			//String ti = Integer.toString(t);
+			//JLabel timeL = new JLabel(ti);
+			//aPanel.add(timeL);
+			
+			JTextArea a = new JTextArea(QL.supplementation.get(0).toString());
+			a.setLineWrap(true);  
+			a.setFont(defFont);
+			a.setBackground(UIManager.getColor("control"));
 			aPanel.add(a);
 			//QL.answer.get(0).toString();
+			
+			//複数行のコメントに対応するため作業中
+			//JTextArea com = new JTextArea(30, 20);//コメントを提示
+			//JScrollPane scrollpane = new JScrollPane(com);//スクロールバー
+			//scrollpane.setLocation(0,0);
+			//scrollpane.setBounds(10,10,50,50);
+			//com.setText(QL.supplementation.get(0).toString());
+			//qTA.setFont(new Font("BOLD", Font.PLAIN,16));
+			//com.setFont(defFont);
+			//qTA.setSize(500, 400);
+			//qTA.setSize(300,200);
+			//com.setEditable(false);//書き込み不可にする
+			//qTA.setBackground(UIManager.getColor("control"));//BGColorを周りと同じに
+			//qPanel.add(qTA);//テキストエリアをパネルに追加
+			//aPanel.add(com);//テキストエリアをパネルに追加
 
 			
 			//DBへの書き込み
 			//WriteLog(String username,int judg,String seq,int order,String program_set,int p_ID,int q_lev,Timestapm start,Timestamp end)
-			WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,level,stDate,endDate);
+			WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,level,ans,QL.answer,stDate,endDate);
 			
 			
 			//ボタンの配置
@@ -438,7 +604,10 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				JButton nextb = new JButton("次の問題");//採点ボタン
 				nextb.setActionCommand("NEXT");
 				nextb.addActionListener(this);
-				bPanel.add(nextb);
+				//bPanel.add(nextb);
+				JPanel nxP = new JPanel();
+				nxP.add(nextb);
+				aPanel.add(nxP);
 			}
 			else{
 				JButton endb = new JButton("終了");
@@ -448,12 +617,13 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			}
 			markingAnswerPane.add(bPanel, BorderLayout.SOUTH);
 			markingAnswerPane.add(infoPanel, BorderLayout.NORTH);
+			markingAnswerPane.add(mPanel, BorderLayout.WEST);
 			markingAnswerPane.add(aPanel, BorderLayout.CENTER);
 			
 		return markingAnswerPane;
 	}
 
-	private JPanel giveupPane(int ID,String p_set){
+	private JPanel giveupPane(int ID,String p_set,ArrayList ans){
 		//giveup画面
 				small_ord++;
 				giveupPane = new JPanel();
@@ -464,8 +634,9 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				nextID = 0;
 				
 				JPanel infoPanel = new JPanel();//情報提示用のパネル
+				JPanel mPanel = new JPanel();//問題文提示用パネル
 				JPanel aPanel = new JPanel();//解答提示用のパネル
-				//aPanel.setLayout(new GridLayout(4,1));
+				aPanel.setLayout(new GridLayout(10,1));
 				JPanel bPanel = new JPanel();//ボタン提示用パネル
 				int flag = 1;
 				
@@ -474,14 +645,62 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				infoPanel.add(order);
 				JLabel l = new JLabel("Level:"+level);
 				infoPanel.add(l);
-				JLabel qid = new JLabel("問題ID："+ID);
-				infoPanel.add(qid);
-				JLabel ps = new JLabel("Program_set:"+p_set);
-				infoPanel.add(ps);
+				//JLabel qid = new JLabel("問題ID："+ID);
+				//infoPanel.add(qid);
+				//JLabel ps = new JLabel("Program_set:"+p_set);
+				//infoPanel.add(ps);
 
-				JLabel kai = new JLabel("解説");
-				aPanel.add(kai);
-				JLabel a = new JLabel(QL.supplementation.get(0).toString());
+				//問題文の配置
+				//System.out.println("question:"+QL.question.get(0).toString());
+				//JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
+				JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+				
+				JScrollPane scrollpane = new JScrollPane(qTA);//スクロールバー
+				//scrollpane.setLocation(0,0);
+				//scrollpane.setBounds(10,10,50,50);
+				qTA.setText(QL.question.get(0).toString());
+				//qTA.setFont(new Font("BOLD", Font.PLAIN,16));
+				qTA.setFont(defFont);
+				//qTA.setSize(500, 400);
+				//qTA.setSize(300,200);
+				qTA.setEditable(false);//書き込み不可にする
+				//qTA.setBackground(UIManager.getColor("control"));//BGColorを周りと同じに
+				//qPanel.add(qTA);//テキストエリアをパネルに追加
+				mPanel.add(scrollpane);//テキストエリアをパネルに追加
+				
+				
+				
+				int end = QL.answer.size();
+				//JLabel kai = new JLabel("模範解答");
+				//kai.setFont(defFont);
+				//aPanel.add(kai);
+				//for(int i=0;i<end;i++){
+				//	JLabel mohan = new JLabel((i+1)+":"+QL.answer.get(i).toString());
+				//	mohan.setFont(defFont);
+				//	aPanel.add(mohan);
+				//}
+				//模範解答提示
+				String kai = new String();
+				JLabel k = new JLabel("模範解答",SwingConstants.CENTER);
+				k.setFont(defFont);
+				aPanel.add(k);
+				for(int i=0;i<end;i++){
+					kai = kai + (i+1) + ":" + QL.answer.get(i).toString() + "  ";
+					//JLabel mohan = new JLabel((i+1)+":"+QL.answer.get(i).toString());
+					//aPanel.add(mohan);
+				}
+				JLabel mohan = new JLabel(kai,SwingConstants.CENTER);
+				mohan.setFont(defFont);
+				aPanel.add(mohan);
+				
+				JLabel kaisetu = new JLabel("解説",SwingConstants.CENTER);
+				kaisetu.setFont(defFont);
+				aPanel.add(kaisetu);
+				//JLabel a = new JLabel(QL.supplementation.get(0).toString(),SwingConstants.CENTER);
+				JTextArea a = new JTextArea(QL.supplementation.get(0).toString());
+				a.setLineWrap(true);  
+				a.setFont(defFont);
+				a.setBackground(UIManager.getColor("control"));
 				aPanel.add(a);
 				
 				
@@ -492,7 +711,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				
 				//DBへの書き込み
 				//WriteLog(String username,int judg,String seq,int order,String program_set,int p_ID,int q_lev,Timestapm start,Timestamp end)
-				WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,level,stDate,endDate);
+				WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,level,ans,QL.answer,stDate,endDate);
 				
 				co_mi++;//連続誤り数加算
 				to_mi++;//合計誤り数加算
@@ -524,7 +743,10 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 					JButton nextb = new JButton("次の問題");//採点ボタン
 					nextb.setActionCommand("NEXT");
 					nextb.addActionListener(this);
-					bPanel.add(nextb);
+					//bPanel.add(nextb);
+					JPanel nxP = new JPanel();
+					nxP.add(nextb);
+					aPanel.add(nxP);
 				}
 				else{
 					JButton endb = new JButton("終了");
@@ -533,6 +755,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 					bPanel.add(endb);
 				}
 				giveupPane.add(bPanel, BorderLayout.SOUTH);
+				giveupPane.add(mPanel, BorderLayout.WEST);
 				giveupPane.add(infoPanel, BorderLayout.NORTH);
 				giveupPane.add(aPanel, BorderLayout.CENTER);
 				
@@ -547,6 +770,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				
 				JPanel infoPanel = new JPanel();//情報提示用のパネル
 				JPanel cPanel = new JPanel();//コメント提示用のパネル
+				cPanel.setLayout(new GridLayout(5,1));
 				JPanel bPanel = new JPanel();//ボタン提示用パネル
 				
 				//問題情報の提示
@@ -554,18 +778,23 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				infoPanel.add(order);
 				JLabel l = new JLabel("Level:"+level);
 				infoPanel.add(l);
-				JLabel qid = new JLabel("問題ID："+ID);
-				infoPanel.add(qid);
-				JLabel ps = new JLabel("Program_set:"+p_set);
-				infoPanel.add(ps);
+				//JLabel qid = new JLabel("問題ID："+ID);
+				//infoPanel.add(qid);
+				//JLabel ps = new JLabel("Program_set:"+p_set);
+				//infoPanel.add(ps);
 				
-				JLabel kai = new JLabel("節"+seqence+"は終了しました。お疲れさまでした。");
+				JLabel kai = new JLabel("節"+seqence+"は終了しました。お疲れさまでした。",SwingConstants.CENTER);
+				kai.setFont(defFont);//フォント設定
 				cPanel.add(kai);
-				JLabel sei = new JLabel("正解数:"+full_co+"/"+max_ord);
-				int r = (int)(((double)full_co/(double)max_ord)*100);
+				JLabel sei = new JLabel("正解数:"+full_co+"/"+max_ord,SwingConstants.CENTER);//正解数の表示
+				int r = (int)(((double)full_co/(double)max_ord)*100);//正解率の計算
 				System.out.println("r:"+r);
-				JLabel ritu = new JLabel("正答率:"+r+"%");
-				cPanel.add(sei);
+				JLabel ritu = new JLabel("正答率:"+r+"%",SwingConstants.CENTER);
+				
+				sei.setFont(defFont);//フォント設定
+				ritu.setFont(defFont);
+				
+				cPanel.add(sei);//パネルへ配置
 				cPanel.add(ritu);
 				
 				JButton endb = new JButton("始めに戻る");
@@ -582,26 +811,27 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		
-	//ボタンの動作
+	/*//ボタンの動作
 		if (e.getActionCommand() == "START1" ){
 			sec=0;
 			//ord = 1;
 			//seqence = "array";
-			seqence = "struct";
+			//seqence = "struct";
+			seqence = "point1";
 			//this.setContentPane(setQuestionPane(level,"test_set"));
 			this.setContentPane(setQuestionPane(level,seqence));
 			//時間取得
 			Calendar now = Calendar.getInstance(); //インスタンス化
 			
-			/*int Y = now.get(now.YEAR);
-			int M = now.get(now.MONTH);//月の値を0~11で取得
-			M = M+1;//1~12にするために１を加算
-			int D = now.get(now.DATE);
-			int h = now.get(now.HOUR_OF_DAY);//時を取得
-			int m = now.get(now.MINUTE);     //分を取得
-			int s = now.get(now.SECOND);      //秒を取得
-			startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			*/
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
 			
 			//開始時間の取得
 			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -632,15 +862,15 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			//時間取得
 			Calendar now = Calendar.getInstance(); //インスタンス化
 			
-			/*int Y = now.get(now.YEAR);
-			int M = now.get(now.MONTH);//月の値を0~11で取得
-			M = M+1;//1~12にするために１を加算
-			int D = now.get(now.DATE);
-			int h = now.get(now.HOUR_OF_DAY);//時を取得
-			int m = now.get(now.MINUTE);     //分を取得
-			int s = now.get(now.SECOND);      //秒を取得
-			startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			*/
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
 			
 			//開始時間の取得
 			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -667,15 +897,15 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			//時間取得
 			Calendar now = Calendar.getInstance(); //インスタンス化
 			
-			/*int Y = now.get(now.YEAR);
-			int M = now.get(now.MONTH);//月の値を0~11で取得
-			M = M+1;//1~12にするために１を加算
-			int D = now.get(now.DATE);
-			int h = now.get(now.HOUR_OF_DAY);//時を取得
-			int m = now.get(now.MINUTE);     //分を取得
-			int s = now.get(now.SECOND);      //秒を取得
-			startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			*/
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
 			
 			//開始時間の取得
 			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -702,15 +932,15 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			//時間取得
 			Calendar now = Calendar.getInstance(); //インスタンス化
 			
-			/*int Y = now.get(now.YEAR);
-			int M = now.get(now.MONTH);//月の値を0~11で取得
-			M = M+1;//1~12にするために１を加算
-			int D = now.get(now.DATE);
-			int h = now.get(now.HOUR_OF_DAY);//時を取得
-			int m = now.get(now.MINUTE);     //分を取得
-			int s = now.get(now.SECOND);      //秒を取得
-			startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			*/
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
 			
 			//開始時間の取得
 			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -737,15 +967,15 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			//時間取得
 			Calendar now = Calendar.getInstance(); //インスタンス化
 			
-			/*int Y = now.get(now.YEAR);
-			int M = now.get(now.MONTH);//月の値を0~11で取得
-			M = M+1;//1~12にするために１を加算
-			int D = now.get(now.DATE);
-			int h = now.get(now.HOUR_OF_DAY);//時を取得
-			int m = now.get(now.MINUTE);     //分を取得
-			int s = now.get(now.SECOND);      //秒を取得
-			startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			*/
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
 			
 			//開始時間の取得
 			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -772,15 +1002,159 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			//時間取得
 			Calendar now = Calendar.getInstance(); //インスタンス化
 			
-			/*int Y = now.get(now.YEAR);
-			int M = now.get(now.MONTH);//月の値を0~11で取得
-			M = M+1;//1~12にするために１を加算
-			int D = now.get(now.DATE);
-			int h = now.get(now.HOUR_OF_DAY);//時を取得
-			int m = now.get(now.MINUTE);     //分を取得
-			int s = now.get(now.SECOND);      //秒を取得
-			startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			*/
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
+			
+			//開始時間の取得
+			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+			stDate = new java.sql.Timestamp(now.getTimeInMillis());
+			//System.out.println("startTime:"+sdf.format(stDate));
+			max = Integer.parseInt(QL.max_time.get(0).toString());
+			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
+			//System.out.println("startTime:"+startTime);
+			
+			//ユーザ名の取得
+			user_name = get_user_name.getText();
+			//System.out.println("user_name:"+user_name); 
+			this.setVisible(true);
+		}*/
+		
+		if (e.getActionCommand() == "START7" ){
+			sec=0;
+			//ord = 1;
+			//seqence = "array";
+			//seqence = "struct";
+			seqence = "point11";
+			//this.setContentPane(setQuestionPane(level,"test_set"));
+			this.setContentPane(setQuestionPane(level,seqence));
+			//時間取得
+			Calendar now = Calendar.getInstance(); //インスタンス化
+			
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
+			
+			//開始時間の取得
+			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+			stDate = new java.sql.Timestamp(now.getTimeInMillis());
+			
+			//System.out.println("stdate:"+stDate);
+			max = Integer.parseInt(QL.max_time.get(0).toString());
+			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
+			//System.out.println("eddate:"+maxtime);
+			//System.out.println("startTime:"+sdf.format(stDate));
+			
+			//System.out.println("startTime:"+startTime);
+			
+			//ユーザ名の取得
+			user_name = get_user_name.getText();
+			
+			//System.out.println("user_name:"+user_name); 
+			//this.setContentPane(setQuestionPane(level,seqence));
+			this.setVisible(true);
+		}
+		if (e.getActionCommand() == "START8" ){
+			sec = 0;
+			//ord = 1;
+			seqence = "point21";
+			//this.setContentPane(setQuestionPane(level,"test_set"));
+			this.setContentPane(setQuestionPane(level,seqence));
+			
+			//時間取得
+			Calendar now = Calendar.getInstance(); //インスタンス化
+			
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
+			
+			//開始時間の取得
+			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+			stDate = new java.sql.Timestamp(now.getTimeInMillis());
+			//System.out.println("startTime:"+sdf.format(stDate));
+			max = Integer.parseInt(QL.max_time.get(0).toString());
+			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
+			//System.out.println("startTime:"+startTime);
+			
+			//ユーザ名の取得
+			user_name = get_user_name.getText();
+			//System.out.println("user_name:"+user_name); 
+			this.setVisible(true);
+		}
+		
+		if (e.getActionCommand() == "START9" ){
+			sec =0;
+			//ord = 1;
+			//seqence = "pointer";
+			seqence = "point12";
+			//this.setContentPane(setQuestionPane(level,"test_set"));
+			this.setContentPane(setQuestionPane(level,seqence));
+
+			//時間取得
+			Calendar now = Calendar.getInstance(); //インスタンス化
+			
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
+			
+			//開始時間の取得
+			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+			stDate = new java.sql.Timestamp(now.getTimeInMillis());
+			//System.out.println("startTime:"+sdf.format(stDate));
+			max = Integer.parseInt(QL.max_time.get(0).toString());
+			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
+			//System.out.println("startTime:"+startTime);
+			
+			//ユーザ名の取得
+			user_name = get_user_name.getText();
+			//System.out.println("user_name:"+user_name); 
+			this.setVisible(true);
+		}
+		
+		if (e.getActionCommand() == "START10" ){
+			sec =0;
+			//ord = 1;
+			//seqence = "pointer";
+			seqence = "point22";
+			//this.setContentPane(setQuestionPane(level,"test_set"));
+			this.setContentPane(setQuestionPane(level,seqence));
+
+			//時間取得
+			Calendar now = Calendar.getInstance(); //インスタンス化
+			
+			//int Y = now.get(now.YEAR);
+			//int M = now.get(now.MONTH);//月の値を0~11で取得
+			//M = M+1;//1~12にするために１を加算
+			//int D = now.get(now.DATE);
+			//int h = now.get(now.HOUR_OF_DAY);//時を取得
+			//int m = now.get(now.MINUTE);     //分を取得
+			//int s = now.get(now.SECOND);      //秒を取得
+			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+			
 			
 			//開始時間の取得
 			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -862,7 +1236,9 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		}
 		if (e.getActionCommand() == "GIVEUP" ){
 			timer.stop();
-			this.setContentPane(giveupPane(Integer.parseInt(QL.qID.get(0).toString()),seqence));
+			ArrayList getAns = new ArrayList();
+			getAns.add("GIVEUP");
+			this.setContentPane(giveupPane(Integer.parseInt(QL.qID.get(0).toString()),seqence,getAns));
 			this.setVisible(true);
 		}
 		if (e.getActionCommand() == "HINT" ){
@@ -870,7 +1246,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			this.setContentPane(setQuestionPane(level,seqence));
 			this.setVisible(true);
 		}
-		if (e.getActionCommand() == "END" ){
+		if (e.getActionCommand() == "END" ){//動作がおかしい
 			//System.out.println("END!!");
 			this.setContentPane(endPane(Integer.parseInt(QL.qID.get(0).toString()),seqence));
 			this.setVisible(true);
@@ -886,7 +1262,9 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 
 	    if (sec >= max){
 	      timer.stop();
-	      this.setContentPane(giveupPane(Integer.parseInt(QL.qID.get(0).toString()),seqence));
+	      ArrayList getAns = new ArrayList();
+	      getAns.add("TIMEUP");
+	      this.setContentPane(giveupPane(Integer.parseInt(QL.qID.get(0).toString()),seqence,getAns));
 	      this.setVisible(true);
 	    }else{
 	      sec++;

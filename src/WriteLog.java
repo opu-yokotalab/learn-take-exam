@@ -4,10 +4,23 @@ import java.sql.*;
 public class WriteLog {
 //DBへのログ書き込みクラス	
 	
-	WriteLog(String username,int judg,String seq,int order,String program_set,int p_ID,int q_lev,java.sql.Timestamp start,java.sql.Timestamp end){
+	
+	WriteLog(String username,int judg,String seq,int order,String program_set,int p_ID,int q_lev,ArrayList kaitou,ArrayList seikai,java.sql.Timestamp start,java.sql.Timestamp end){
     
 	String uname = username;
-		
+	String kai = new String();
+	String sei = new String();
+	
+	for(int i=0;i<kaitou.size();i++){
+		kai = kai +"["+i+":"+kaitou.get(i).toString()+"]";
+	}
+	for(int i=0;i<kaitou.size();i++){
+		sei = sei +"["+i+":"+seikai.get(i).toString()+"]";
+	}
+	
+	//System.out.println("kai:"+kai);
+	//System.out.println("sei:"+sei);
+	
 	int DB_C=1;
 		
     String driver = "org.postgresql.Driver";
@@ -41,9 +54,9 @@ public class WriteLog {
     	//System.out.println("DB conect OK3");//DB接続チェック
         // ステートメントオブジェクトを生成
         Statement stmt = con.createStatement();
-        String sql = "INSERT INTO user_log VALUES('"
+        String sql = "INSERT INTO user_log2 VALUES('"
         	+ uname + "','" + judg + "','" + seq + "','"  + order + "','" 
-        	+ program_set +"','"+ p_ID +"','"+q_lev +"',to_TIMESTAMP('" + start+ "','yyyy/mm/dd hh24:mi:ss:nnn'),to_TIMESTAMP('" 
+        	+ program_set +"','"+ p_ID +"','"+q_lev +"','"+kai+"','"+sei+"',to_TIMESTAMP('" + start+ "','yyyy/mm/dd hh24:mi:ss:nnn'),to_TIMESTAMP('" 
         	+ end +"','yyyy/mm/dd hh24:mi:ss:nnn'));";
         //System.out.println(sql);
        /*-----------------------+---------+

@@ -28,7 +28,7 @@ public class question_load {
 	ArrayList max_time;
 	ArrayList length;
 	
-	question_load(int lev,String p_set,int order,int full_order){
+	question_load(int lev,String p_set,int order,int full_order,ArrayList ready){
 	
 		int i;
 		String questiontext = new String();
@@ -153,214 +153,129 @@ public class question_load {
 	        ResultSet rs = stmt.executeQuery(sql);
 	        int id=1;
 	        
-	        //完全に出すもの指定
-	        /*if(full_order==1){
-	        	if(p_set.equals("struct")){
-	        		p_set = "struct2";
-	        		id = 14;
-	        	}else if(p_set.equals("struct2")){
-	        		p_set = "struct2";
-	        		id = 23;
-	        	}else {//struct3
-	        		p_set = "struct2";
-	        		id = 16;
+	        //共通問題の問題指定
+	        if(p_set.equals("point12")){
+	        	if(full_order==1){
+	        		id = 74;
+	        	}else if(full_order==2){
+	        		id = 76;
+	        	}else if(full_order==3){
+	        		id = 105;
+	        	}else if(full_order==4){
+	        		id = 92;
+	        	}else if(full_order==5){
+	        		id = 104;
+	        	}else if(full_order==6){
+	        		id = 80;
+	        	}else {
+	        		id = 73;
 	        	}
-	        }else if(full_order==2){
-	        	if(p_set.equals("struct")){
-	        		p_set = "struct";
-	        		id = 6;
-	        	}else if(p_set.equals("struct2")){
-	        		p_set = "struct3";
-	        		id = 26;
-	        	}else {//struct3
-	        		p_set = "struct2";
-	        		id = 18;
+	        }
+	        else if(p_set.equals("point22")){
+	        	if(full_order==1){
+	        		id = 90;
+	        	}else if(full_order==2){
+	        		id = 110;
+	        	}else if(full_order==3){
+	        		id = 96;
+	        	}else if(full_order==4){
+	        		id = 109;
+	        	}else if(full_order==5){
+	        		id = 85;
+	        	}else if(full_order==6){
+	        		id = 84;
+	        	}else {
+	        		id = 91;
 	        	}
-	        }else if(full_order==3){
-	        	if(p_set.equals("struct")){
-	        		p_set = "struct3";
-	        		id = 33;
-	        	}else if(p_set.equals("struct2")){
-	        		p_set = "struct";
-	        		id = 4;
-	        	}else {//struct3
-	        		p_set = "struct3";
-	        		id = 34;
-	        	}
-	        }else if(full_order==4){
-	        	if(p_set.equals("struct")){
-	        		p_set = "struct2";
-	        		id = 20;
-	        	}else if(p_set.equals("struct2")){
-	        		p_set = "struct2";
-	        		id = 17;
-	        	}else {//struct3
-	        		p_set = "struct3";
-	        		id = 27;
-	        	}
-	        }else if(full_order==5){
-	        	if(p_set.equals("struct")){
-	        		p_set = "struct";
-	        		id = 13;
-	        	}else if(p_set.equals("struct2")){
-	        		p_set = "struct";
-	        		id = 12;
-	        	}else {//struct3
-	        		p_set = "struct";
-	        		id = 5;
-	        	}
-	        }else if(full_order==6){
-	        	if(p_set.equals("struct")){
-	        		p_set = "struct3";
-	        		id = 25;
-	        	}else if(p_set.equals("struct2")){
-	        		p_set = "struct";
-	        		id = 1;
-	        	}else {//struct3
-	        		p_set = "struct2";
-	        		id = 24;
-	        	}
-	        }else if(full_order==7){
-	        	if(p_set.equals("struct")){
-	        		p_set = "struct";
-	        		id = 7;
-	        	}else if(p_set.equals("struct2")){
-	        		p_set = "struct3";
-	        		id = 28;
-	        	}else {//struct3
-	        		p_set = "struct2";
-	        		id = 21;
-	        	}
-	        }*/
 	        
-	        //1問目と2問目だけは指定した問題を出すように
-	        //1問目
-	        if(order==1){
-	        	//Lv.1
-	        	if(lev==1){
-	        		if(p_set.equals("struct")){
-	        			id=1;
-	        		}else if(p_set.equals("struct2")){
-	        			id=14;
-	        		}else if(p_set.equals("struct3")){
-	        			id=25;
-	        		}else if (p_set.equals("pointer")){
-	        			id=41;
-	        		}else if (p_set.equals("pointer2")){
-	        			id=46;
-	        		}else if (p_set.equals("pointer3")){
-	        			id=58;
-	        		}
+	        /*}else if(p_set.equals("point11")){
+	        	if(full_order==1){
+	        		id = 79;
+	        	}else if(full_order==2){
+	        		id = 101;
+	        	}else if(full_order==3){
+	        		id = 78;
+	        	}else if(full_order==4){
+	        		id = 88;
+	        	}else if(full_order==5){
+	        		id = 98;
+	        	}else if(full_order==6){
+	        		id = 99;
+	        	}else {
+	        		id = 86;
 	        	}
-	        	//Lv.2
-	        	else if (lev == 2){
-	        		if(p_set.equals("struct")){
-	        			id=7;
-	        		}else if(p_set.equals("struct2")){
-	        			id=20;
-	        		}else if(p_set.equals("struct3")){
-	        			id=26;
-	        		}else if (p_set.equals("pointer")){
-	        			id=37;
-	        		}else if (p_set.equals("pointer2")){
-	        			//id=48;
-	        			id=60;//金子研究用難しすぎる問題
-	        			p_set = "pointer3";
-	        		}else if (p_set.equals("pointer3")){
-	        			//id=60;
-	        			id=35;//金子研究用（簡単すぎる問題）
-	        			p_set = "pointer";
-	        		}
-	        	}
-	        	//Lv.3
-	        	else if (lev == 3){
-	        		if(p_set.equals("struct")){
-	        			id=12;
-	        		}else if(p_set.equals("struct2")){
-	        			id=18;
-	        		}else if(p_set.equals("struct3")){
-	        			id=33;
-	        		}else if (p_set.equals("pointer")){
-	        			id=36;
-	        		}else if (p_set.equals("pointer2")){
-	        			id=52;
-	        		}else if (p_set.equals("pointer3")){
-	        			//id=66;
-	        			id=44;//金子研究用（簡単すぎる問題）
-	        			p_set = "pointer";
-	        		}
-	        	}
-	        //2問目
-	        }else if(order==2){
-	        	//Lv.1
-	        	if(lev==1){
-	        		if(p_set.equals("struct")){
-	        			id=6;
-	        		}else if(p_set.equals("struct2")){
-	        			id=17;
-	        			
-	        		}else if(p_set.equals("struct3")){
-	        			id=27;
-	        		}else if (p_set.equals("pointer")){
-	        			//id=35;
-	        			id=48;//金子研究用（難しい問題）
-	        			p_set = "pointer2";
-	        		}else if (p_set.equals("pointer2")){
-	        			id=47;
-	        		}else if (p_set.equals("pointer3")){
-	        			id=64;
-	        		}
-	        	}
-	        	//Lv.2
-	        	else if (lev == 2){
-	        		if(p_set.equals("struct")){
-	        			id=4;
-	        		}else if(p_set.equals("struct2")){
-	        			id=16;
-	        		}else if(p_set.equals("struct3")){
-	        			id=28;
-	        		}else if (p_set.equals("pointer")){
-	        			//id=44;
-	        			id=66;//金子研究用（難しすぎる問題)
-	        			p_set = "pointer3";
-	        		}else if (p_set.equals("pointer2")){
-	        			id=50;
-	        		}else if (p_set.equals("pointer3")){
-	        			id=67;
-	        		}
-	        	}
-	        	//Lv.3
-	        	else if (lev == 3){
-	        		if(p_set.equals("struct")){
-	        			id=13;
-	        		}else if(p_set.equals("struct2")){
-	        			id=23;
-	        		}else if(p_set.equals("struct3")){
-	        			id=34;
-	        		}else if (p_set.equals("pointer")){
-	        			id=37;
-	        		}else if (p_set.equals("pointer2")){
-	        			id=55;
-	        		}else if (p_set.equals("pointer3")){
-	        			id=65;
-	        		}
-	        	}
+	        }else if(p_set.equals("point21")){
+	        	if(full_order==1){
+	        		id = 108;
+	        	}else if(full_order==2){
+	        		id = 93;
+	        	}else if(full_order==3){
+	        		id = 94;
+	        	}else if(full_order==4){
+	        		id = 81;
+	        	}else if(full_order==5){
+	        		id = 108;
+	        	}else if(full_order==6){
+	        		id = 97;
+	        	}else {
+	        		id = 87;
+	        	}*/
+	        	
+	        
 	        }else{
-	        //同レベルで2問目以降はランダムで出題
-	        ArrayList idlist = new ArrayList();
-	        while (rs.next()){
-	        	//System.out.println("id:"+rs.getInt("program_ID"));	
-	        	idlist.add(rs.getInt("program_ID"));
-	        }
-	        int listsize = idlist.size();
-	        //System.out.println("listsize:"+listsize);
-	        //int p_id = (int)Math.ceil(listsize * Math.random());
-	        int p_id = (int)(listsize * Math.random());//乱数を与えて何個目の問題を出すか決定
-	        //System.out.println("p_id:"+p_id);
-	        id = Integer.parseInt(idlist.get(p_id).toString());//何個目かを実際のp_idに変換
-	        //System.out.println("id:"+id);
-	        }
+	        	//提案手法で出題
+	        	ArrayList idlist = new ArrayList();
+	        	while (rs.next()){
+	        		//System.out.println("id:"+rs.getInt("program_ID"));	
+	        		idlist.add(rs.getInt("program_ID"));
+	        	}
+	        	int listsize = idlist.size();
+	        	int k=0;
+	        	int mae =0;
+	        	//System.out.println("listsize:"+listsize);
+	        	//int p_id = (int)Math.ceil(listsize * Math.random());
+	        	int p_id = (int)(listsize * Math.random());//乱数を与えて何個目の問題を出すか決定
+	        	id = Integer.parseInt(idlist.get(p_id).toString());//何個目かを実際のp_idに変換
+	        	//System.out.println("first_ID:"+id);
+	        	int flag =0;
+	        	//for(int k=0;k<ready.size();k++){
+	        	if(ready.size()!=0){
+	        		do{
+	        			//System.out.println("ready("+k+"):"+ready.get(k).toString());
+	        			
+	        			//前に同じ問題が出たかどうかのチェック
+	        			if(id == Integer.parseInt(ready.get(k).toString())){
+	        				p_id = (int)(listsize * Math.random());//乱数を与えて何個目の問題を出すか決定
+	        				if(Integer.parseInt(idlist.get(p_id).toString())!=mae){//1つ前に出た問題と同じだったら変える
+	        					id = Integer.parseInt(idlist.get(p_id).toString());//実際のp_idに変換
+	        					//System.out.println("MOVE!!");
+	        				}
+	        				//System.out.println("change_ID:"+id);
+	        				//System.out.println("!!CHANGE!!");
+	        				k=0;
+	        				flag++;
+	        			}
+	        			else{
+	        				k++;
+	        			}
+        			}while(k<ready.size()&&flag<5);
+        		}
+        		mae = id;//ひとつ前に出題した問題として記憶
+        		//System.out.println("mae:"+mae);
+        		
+	        }//問題指定するとき用のカッコ
+        	
 	        qID.add(id);
+	        ready.add(id);
+	        
+	        //for(int j=0;j<qID.size();j++){
+	        //	System.out.println("qID:"+qID.get(j).toString());
+	        //}
+	        System.out.println(order+"問目出題時");
+	        for(int j=0;j<ready.size();j++){
+	        	System.out.println("list"+j+":"+ready.get(j).toString());
+	        }
+	        System.out.println("-------------------");
 	        
 	        //問題文を取得
 	        //sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+";";
@@ -416,9 +331,9 @@ public class question_load {
 			    	  }
 			    	  //pre以下の問題のソースコードを取得
 			    	  NodeList pre = element.getElementsByTagName("pre");
-			    	  for(int k=0;k<pre.getLength();k++){
+			    	  for(int l=0;l<pre.getLength();l++){
 			    		  //System.out.println("pre.getLength():"+pre.getLength());
-			    		  questiontext = questiontext + pre.item(k).getFirstChild().getNodeValue();
+			    		  questiontext = questiontext + pre.item(l).getFirstChild().getNodeValue();
 			    	  }
 			      }
 			      
