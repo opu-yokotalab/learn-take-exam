@@ -407,12 +407,13 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			JPanel bPanel = new JPanel();//ボタン提示用パネル
 			int flag = 0;
 			
+			int l = Integer.parseInt(QL.level.get(0).toString());
 			//問題情報の提示
 			JLabel order = new JLabel ("第"+ord+"問目  ");
 			infoPanel.add(order);
 			//JLabel l = new JLabel("Level:"+QL.level.get(0).toString());
-			JLabel l = new JLabel("Level:"+level);
-			infoPanel.add(l);
+			JLabel lv = new JLabel("Level:"+l);
+			infoPanel.add(lv);
 			
 			
 			//問題文の配置
@@ -596,7 +597,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			
 			//DBへの書き込み
 			//WriteLog(String username,int judg,String seq,int order,String program_set,int p_ID,int q_lev,Timestapm start,Timestamp end)
-			WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,level,ans,QL.answer,stDate,endDate);
+			WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,l,ans,QL.answer,stDate,endDate);
 			
 			
 			//ボタンの配置
@@ -640,11 +641,13 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				JPanel bPanel = new JPanel();//ボタン提示用パネル
 				int flag = 1;
 				
+				int l = Integer.parseInt(QL.level.get(0).toString());
+				
 				//問題情報の提示
 				JLabel order = new JLabel ("第"+ord+"問目  ");
 				infoPanel.add(order);
-				JLabel l = new JLabel("Level:"+level);
-				infoPanel.add(l);
+				JLabel lv = new JLabel("Level:"+l);
+				infoPanel.add(lv);
 				//JLabel qid = new JLabel("問題ID："+ID);
 				//infoPanel.add(qid);
 				//JLabel ps = new JLabel("Program_set:"+p_set);
@@ -711,7 +714,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				
 				//DBへの書き込み
 				//WriteLog(String username,int judg,String seq,int order,String program_set,int p_ID,int q_lev,Timestapm start,Timestamp end)
-				WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,level,ans,QL.answer,stDate,endDate);
+				WL = new WriteLog(user_name,flag,seqence,ord,p_set,ID,l,ans,QL.answer,stDate,endDate);
 				
 				co_mi++;//連続誤り数加算
 				to_mi++;//合計誤り数加算

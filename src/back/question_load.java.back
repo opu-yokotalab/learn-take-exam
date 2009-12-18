@@ -1,0 +1,549 @@
+import org.w3c.dom.*;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Parser;
+
+import java.sql.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.*;
+
+//import javax.swing.JLabel;
+//import javax.swing.JPanel;
+//import javax.swing.JTextField;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+public class question_load {
+//問題文読み込みクラス
+	
+	ArrayList program_set;
+	ArrayList qID;
+	ArrayList level;
+	ArrayList question;
+	ArrayList blank;
+	ArrayList answer;
+	ArrayList hint;
+	ArrayList supplementation;
+	ArrayList max_time;
+	ArrayList length;
+	
+	question_load(int lev,String p_set,int order,int full_order,ArrayList ready){
+	
+		int i;
+		String questiontext = new String();
+		
+		program_set = new ArrayList();
+	    qID = new ArrayList();
+	    level = new ArrayList();
+	    question = new ArrayList();
+	    blank = new ArrayList();
+	    answer = new ArrayList();
+	    length = new ArrayList();
+	    //hint = new ArrayList();
+	    supplementation = new ArrayList();
+	    max_time = new ArrayList();
+	    program_set.add(p_set);
+	    
+	    level.add(lev);
+	    
+	    
+	    //ローカルのxmlファイルから問題を呼び出す
+		/*String filename = "C:\\Users\\ariyasu\\workspace\\mkexam2\\"+p_set+"_"+ID+".xml";
+		 
+	    try {
+	      // ドキュメントビルダーファクトリを生成
+	      DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+	      // ドキュメントビルダーを生成
+	      DocumentBuilder builder = dbfactory.newDocumentBuilder();
+	      // パースを実行してDocumentオブジェクトを取得
+	      Document doc = builder.parse(new File(filename));
+	      // ルート要素を取得
+	      Element root = doc.getDocumentElement();
+	      
+	      //----------問題文--------------
+	      //問題文を記述しているquestion要素を探し出す
+	      NodeList list = root.getElementsByTagName("question");
+	      for(i=0;i<list.getLength();i++){
+	    	  Element element = (Element)list.item(i);
+	    	  NodeList clist = element.getChildNodes();
+	    	  
+	    	  //問題文を取得
+	    	  for(int j=0;j<clist.getLength();j++){
+	    		  if(clist.item(j).getNodeValue()!=null){
+	    			  questiontext = questiontext+clist.item(j).getNodeValue();
+	    			  //if(questiontext.length()>15){
+	    			  //  String div = questiontext;
+	    			  //}
+	    		  }
+	    	  }
+	    	  //pre以下の問題のソースコードを取得
+	    	  NodeList pre = element.getElementsByTagName("pre");
+	    	  for(int k=0;k<pre.getLength();k++){
+	    		  //System.out.println("pre.getLength():"+pre.getLength());
+	    		  questiontext = questiontext + pre.item(k).getFirstChild().getNodeValue();
+	    	  }
+	      }
+	      
+		  question.add(questiontext); 
+	      
+		  //-----ここまで問題文-----------
+		  
+	      //------回答欄-------------
+	      list = root.getElementsByTagName("response");
+	      length.add(list.getLength());
+	      for(i=0;i<list.getLength();i++){
+	    	  //JLabel ansLabel=new JLabel(list.item(i).getFirstChild().getNodeValue());
+	    	  //ansLabel[i].setText(list.item(i).getFirstChild().getNodeValue());
+	    	  //System.out.println("response:"+list.item(i).getFirstChild().getNodeValue());
+	    	  //ansPanel.add(ansLabel);
+	    	  //ansPanel.add(resp[i]=new JTextField(10));
+	    	  blank.add(list.item(i).getFirstChild().getNodeValue());
+	      }
+	      //-----ここまで回答欄----------------
+	      //-------とりあえず解答---------------
+	      list = root.getElementsByTagName("correct");
+	      for(i=0;i<list.getLength();i++){
+	    	  answer.add(list.item(i).getFirstChild().getNodeValue());
+	      }
+	      //-------ここまで解答---------------
+	      //-------補足説明----------------------
+	      list = root.getElementsByTagName("explanation");
+	      for(i=0;i<list.getLength();i++){
+	    	  supplementation.add(list.item(i).getFirstChild().getNodeValue());
+	      }	      
+	      //-------ここまで補足説明-----------------
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }*/
+	    
+	    
+	    //DBからの呼び出し
+	    String driver = "org.postgresql.Driver";
+	    //どこのDBに接続するかの判定(0:ローカル、1:emerald)
+	    int DB_C = 1;
+
+	    //デフォルトはローカルホストへのアクセス
+	    String url = "jdbc:postgresql://127.0.0.1:5432/problem_DB";
+	    String user = "postgres";
+	    String pass = "postgres";
+	    
+	    
+	    if(DB_C == 1){
+	    	//サーバ(emerald.c.oka-pu.ac.jp)へのアクセス
+	    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB";
+	    	user = "ariyasu";
+	    	pass = "flyinggarnet";
+	    }
+	    
+	    try {
+	        // ドライバクラスをロード
+	        Class.forName(driver); // PostgreSQLの場合
+	        // データベースへ接続
+
+	        Connection con = DriverManager.getConnection(url,user,pass);
+	    	//System.out.println("DB conect OK3");//DB接続チェック
+	        // ステートメントオブジェクトを生成
+	        Statement stmt = con.createStatement();
+	        
+	        
+	        //String sql = "SELECT source FROM question WHERE program_set = \"sample\" AND id= \"1\";";
+	        //レベルとプログラムセットを指定して問題のリストを得る
+	        String sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+";";
+	        ResultSet rs = stmt.executeQuery(sql);
+	        int id=1;
+	        
+	        /*//共通問題の問題指定
+	        if(p_set.equals("point21")){
+	        	if(full_order==1){
+	        		//id = 14;
+	        	}else if(full_order==2){
+	        		
+	        	}else if(full_order==3){
+	        		
+	        	}else if(full_order==4){
+	        		
+	        	}else if(full_order==5){
+	        		
+	        	}else if(full_order==6){
+	        		
+	        	}else {
+	        		
+	        	}
+	        }
+	        else if(p_set.equals("point22")){
+	        	if(full_order==1){
+	        		//id = 14;
+	        	}else if(full_order==2){
+	        		
+	        	}else if(full_order==3){
+	        		
+	        	}else if(full_order==4){
+	        		
+	        	}else if(full_order==5){
+	        		
+	        	}else if(full_order==6){
+	        		
+	        	}else {
+	        		
+	        	}
+	        }*/
+	        //完全に出すもの指定
+	        /*if(full_order==1){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct2";
+	        		id = 14;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct2";
+	        		id = 23;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 16;
+	        	}
+	        }else if(full_order==2){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct";
+	        		id = 6;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct3";
+	        		id = 26;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 18;
+	        	}
+	        }else if(full_order==3){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct3";
+	        		id = 33;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct";
+	        		id = 4;
+	        	}else {//struct3
+	        		p_set = "struct3";
+	        		id = 34;
+	        	}
+	        }else if(full_order==4){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct2";
+	        		id = 20;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct2";
+	        		id = 17;
+	        	}else {//struct3
+	        		p_set = "struct3";
+	        		id = 27;
+	        	}
+	        }else if(full_order==5){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct";
+	        		id = 13;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct";
+	        		id = 12;
+	        	}else {//struct3
+	        		p_set = "struct";
+	        		id = 5;
+	        	}
+	        }else if(full_order==6){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct3";
+	        		id = 25;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct";
+	        		id = 1;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 24;
+	        	}
+	        }else if(full_order==7){
+	        	if(p_set.equals("struct")){
+	        		p_set = "struct";
+	        		id = 7;
+	        	}else if(p_set.equals("struct2")){
+	        		p_set = "struct3";
+	        		id = 28;
+	        	}else {//struct3
+	        		p_set = "struct2";
+	        		id = 21;
+	        	}
+	        }*/
+	        
+	        //1問目と2問目だけは指定した問題を出すように
+	        //1問目
+	        /*if(order==1){
+	        	//Lv.1
+	        	if(lev==1){
+	        		if(p_set.equals("struct")){
+	        			id=1;
+	        		}else if(p_set.equals("struct2")){
+	        			id=14;
+	        		}else if(p_set.equals("struct3")){
+	        			id=25;
+	        		}else if (p_set.equals("pointer")){
+	        			id=41;//出題ミス
+	        		}else if (p_set.equals("pointer2")){
+	        			id=46;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=58;
+	        		}
+	        	}
+	        	//Lv.2
+	        	else if (lev == 2){
+	        		if(p_set.equals("struct")){
+	        			id=7;
+	        		}else if(p_set.equals("struct2")){
+	        			id=20;
+	        		}else if(p_set.equals("struct3")){
+	        			id=26;
+	        		}else if (p_set.equals("pointer")){
+	        			id=37;//出題ミス
+	        		}else if (p_set.equals("pointer2")){
+	        			//id=48;
+	        			id=60;//金子研究用難しすぎる問題
+	        			p_set = "pointer3";
+	        		}else if (p_set.equals("pointer3")){
+	        			//id=60;
+	        			id=35;//金子研究用（簡単すぎる問題）
+	        			p_set = "pointer";
+	        		}
+	        	}
+	        	//Lv.3
+	        	else if (lev == 3){
+	        		if(p_set.equals("struct")){
+	        			id=12;
+	        		}else if(p_set.equals("struct2")){
+	        			id=18;
+	        		}else if(p_set.equals("struct3")){
+	        			id=33;
+	        		}else if (p_set.equals("pointer")){
+	        			id=36;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=52;
+	        		}else if (p_set.equals("pointer3")){
+	        			//id=66;
+	        			id=44;//金子研究用（簡単すぎる問題）
+	        			p_set = "pointer";
+	        		}
+	        	}
+	        //2問目
+	        }else if(order==2){
+	        	//Lv.1
+	        	if(lev==1){
+	        		if(p_set.equals("struct")){
+	        			id=6;
+	        		}else if(p_set.equals("struct2")){
+	        			id=17;
+	        			
+	        		}else if(p_set.equals("struct3")){
+	        			id=27;
+	        		}else if (p_set.equals("pointer")){
+	        			//id=35;
+	        			id=48;//金子研究用（難しい問題）
+	        			p_set = "pointer2";
+	        		}else if (p_set.equals("pointer2")){
+	        			id=47;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=64;
+	        		}
+	        	}
+	        	//Lv.2
+	        	else if (lev == 2){
+	        		if(p_set.equals("struct")){
+	        			id=4;
+	        		}else if(p_set.equals("struct2")){
+	        			id=16;
+	        		}else if(p_set.equals("struct3")){
+	        			id=28;
+	        		}else if (p_set.equals("pointer")){
+	        			//id=44;
+	        			id=66;//金子研究用（難しすぎる問題)
+	        			p_set = "pointer3";
+	        		}else if (p_set.equals("pointer2")){
+	        			id=50;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=67;
+	        		}
+	        	}
+	        	//Lv.3
+	        	else if (lev == 3){
+	        		if(p_set.equals("struct")){
+	        			id=13;
+	        		}else if(p_set.equals("struct2")){
+	        			id=23;
+	        		}else if(p_set.equals("struct3")){
+	        			id=34;
+	        		}else if (p_set.equals("pointer")){
+	        			id=37;
+	        		}else if (p_set.equals("pointer2")){
+	        			id=55;
+	        		}else if (p_set.equals("pointer3")){
+	        			id=65;
+	        		}
+	        	}
+	        }else{*/
+	        //同レベルで2問目以降はランダムで出題
+	        //System.out.println("test");
+	        ArrayList idlist = new ArrayList();
+	        while (rs.next()){
+	        	//System.out.println("id:"+rs.getInt("program_ID"));	
+	        	idlist.add(rs.getInt("program_ID"));
+	        }
+	        int listsize = idlist.size();
+	        int k=0;
+	        int mae =0;
+	        //System.out.println("listsize:"+listsize);
+	        //int p_id = (int)Math.ceil(listsize * Math.random());
+            int p_id = (int)(listsize * Math.random());//乱数を与えて何個目の問題を出すか決定
+        	id = Integer.parseInt(idlist.get(p_id).toString());//何個目かを実際のp_idに変換
+        	//System.out.println("first_ID:"+id);
+        	int flag =0;
+	        //for(int k=0;k<ready.size();k++){
+        	if(ready.size()!=0){
+        		do{
+        			//System.out.println("ready("+k+"):"+ready.get(k).toString());
+	        			if(id == Integer.parseInt(ready.get(k).toString())){
+	        				p_id = (int)(listsize * Math.random());//乱数を与えて何個目の問題を出すか決定
+	        				if(Integer.parseInt(idlist.get(p_id).toString())!=mae){//1つ前に出た問題と同じだったら変える
+	        					id = Integer.parseInt(idlist.get(p_id).toString());//実際のp_idに変換
+	        					//System.out.println("MOVE!!");
+	        				}
+	        				//System.out.println("change_ID:"+id);
+	        				//System.out.println("!!CHANGE!!");
+	        				k=0;
+	        				flag++;
+	        			}
+	        			else{
+	        				k++;
+	        			}
+        		}while(k<ready.size()&&flag<5);
+        	}
+	        //}
+        	mae = id;//ひとつ前に出題した問題として記憶
+        	//System.out.println("mae:"+mae);
+	        qID.add(id);
+	        ready.add(id);
+	        
+	        //for(int j=0;j<qID.size();j++){
+	        //	System.out.println("qID:"+qID.get(j).toString());
+	        //}
+	        System.out.println(order+"問目出題時");
+	        for(int j=0;j<ready.size();j++){
+	        	System.out.println("list"+j+":"+ready.get(j).toString());
+	        }
+	        System.out.println("-------------------");
+	        
+	        //問題文を取得
+	        //sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+";";
+	        //sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND level="+lev+" AND program_ID="+id+";";
+	        sql = "SELECT * FROM question where program_set=\'"+p_set+"\' AND program_ID="+id+";";
+	        rs = stmt.executeQuery(sql);
+	        //String sql = "SELECT source FROM question where program_set=\'sample\' AND id=1;";
+	        // クエリーを実行して結果セットを取得
+	        
+	        // 検索された行数分ループ
+	        while (rs.next()){
+	        	//System.out.println("DB conect OK3");//DB接続チェック
+	        	//System.out.println("p_set:"+rs.getString("program_set"));
+	        	//rs.next();
+	        	//System.out.println(rs.getString("source"));
+	        	
+	        	String so = rs.getString("source");
+
+	        	// ドキュメントビルダーファクトリを生成
+		        DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+		        // ドキュメントビルダーを生成
+		        DocumentBuilder parser = dbfactory.newDocumentBuilder();	           
+		        // パースを実行してDocumentオブジェクトを取得
+		        //ローカルDBのとき
+		        Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
+		        //Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        if(DB_C == 0){
+		        	doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        }
+		        if(DB_C == 1){
+		        	//emerald上のDBにアクセスするとき
+		        	doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
+		        }
+		        //Document doc = parser.parse(stream);
+		        //System.out.println("DB conect OK8");//DB接続チェック
+		        // ルート要素を取得
+		        Element root = doc.getDocumentElement();
+		        // Do something...
+		        //System.out.println("root:"+root.getTagName());
+			      
+			      //----------問題文--------------
+			      //問題文を記述しているquestion要素を探し出す
+			      NodeList list = root.getElementsByTagName("question");
+			      for(i=0;i<list.getLength();i++){
+			    	  Element element = (Element)list.item(i);
+			    	  NodeList clist = element.getChildNodes();
+			    	  
+			    	  //問題文を取得
+			    	  for(int j=0;j<clist.getLength();j++){
+			    		  if(clist.item(j).getNodeValue()!=null){
+			    			  questiontext = questiontext+clist.item(j).getNodeValue();
+			    		  }
+			    	  }
+			    	  //pre以下の問題のソースコードを取得
+			    	  NodeList pre = element.getElementsByTagName("pre");
+			    	  for(int l=0;l<pre.getLength();l++){
+			    		  //System.out.println("pre.getLength():"+pre.getLength());
+			    		  questiontext = questiontext + pre.item(l).getFirstChild().getNodeValue();
+			    	  }
+			      }
+			      
+				  question.add(questiontext); 
+			      
+				  //-----ここまで問題文-----------
+				  
+			      //------回答欄-------------
+			      list = root.getElementsByTagName("response");
+			      length.add(list.getLength());
+			      for(i=0;i<list.getLength();i++){
+			    	  //JLabel ansLabel=new JLabel(list.item(i).getFirstChild().getNodeValue());
+			    	  //ansLabel[i].setText(list.item(i).getFirstChild().getNodeValue());
+			    	  //System.out.println("response:"+list.item(i).getFirstChild().getNodeValue());
+			    	  //ansPanel.add(ansLabel);
+			    	  //ansPanel.add(resp[i]=new JTextField(10));
+			    	  blank.add(list.item(i).getFirstChild().getNodeValue());
+			      }
+			      //-----ここまで回答欄----------------
+			      //-------とりあえず解答---------------
+			      list = root.getElementsByTagName("correct");
+			      for(i=0;i<list.getLength();i++){
+			    	  answer.add(list.item(i).getFirstChild().getNodeValue());
+			      }
+			      //-------ここまで解答---------------
+			      //-------補足説明----------------------
+			      list = root.getElementsByTagName("explanation");
+			      for(i=0;i<list.getLength();i++){
+			    	  supplementation.add(list.item(i).getFirstChild().getNodeValue());
+			      }	      
+			      //-------ここまで補足説明-----------------
+			      //-----レベルの取得------------------
+			      //list = root.getElementsByTagName("score");
+			      //for(i=0;i<list.getLength();i++){
+			      //  level.add(list.item(i).getFirstChild().getNodeValue());
+			      //}
+			      //-------ここまでレベル-----------------
+			      //-----時間------------------
+			      list = root.getElementsByTagName("function");
+			      for(i=0;i<list.getLength();i++){
+			    	  max_time.add(list.item(i).getFirstChild().getNodeValue());
+			      }
+	        }	        
+
+	        // データベースから切断
+	        stmt.close();
+	        con.close();
+	      } catch (Exception e) {
+	        e.printStackTrace();
+	      }
+	    
+	    
+	}
+	
+	//public void add_question(String aa){
+	//}
+	
+}
