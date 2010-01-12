@@ -131,7 +131,7 @@ public class question_load {
 	    
 	    if(DB_C == 1){
 	    	//サーバ(emerald.c.oka-pu.ac.jp)へのアクセス
-	    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB";
+	    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB2";
 	    	user = "ariyasu";
 	    	pass = "flyinggarnet";
 	    }
@@ -258,7 +258,7 @@ public class question_load {
 	        			else{
 	        				k++;
 	        			}
-        			}while(k<ready.size()&&flag<5);
+        			}while(k<ready.size()&&flag<10);
         		}
         		mae = id;//ひとつ前に出題した問題として記憶
         		//System.out.println("mae:"+mae);

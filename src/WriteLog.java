@@ -31,7 +31,7 @@ public class WriteLog {
     
     if(DB_C == 1){
     	//サーバ(emerald.c.oka-pu.ac.jp)へのアクセス
-    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB";
+    	url = "jdbc:postgresql://163.225.223.42:5432/problem_DB2";
     	user = "ariyasu";
     	pass = "flyinggarnet";
     	

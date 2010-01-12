@@ -6,7 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import javax.swing.*;
+import java.io.*;
+
 import javax.swing.Timer;
+import java.lang.System;
 //import java.sql.*;
 
 
@@ -77,6 +80,13 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	public Take_Exam_main() {
 	//public void main(){
 		//super();
+		try {
+			System.setErr(new PrintStream(new FileOutputStream("errorLog.txt")));
+			//System.setOut(new PrintStream(new FileOutputStream("outputLog.txt")));
+		} catch (FileNotFoundException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
 		initialize();
 		this.setVisible(true);
 	}
@@ -97,6 +107,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	private void initialize() {//初期化
 		this.setSize(1000, 750);
 		this.setContentPane(getJContentPane());
+
 		//this.setContentPane(setQuestionPane());
 		this.setTitle("演習システム");
 		//this.setVisible(true);
