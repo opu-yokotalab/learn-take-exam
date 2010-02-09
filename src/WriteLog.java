@@ -21,7 +21,7 @@ public class WriteLog {
 	//System.out.println("kai:"+kai);
 	//System.out.println("sei:"+sei);
 	
-	int DB_C=1;
+	int DB_C=0;
 		
     String driver = "org.postgresql.Driver";
     

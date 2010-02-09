@@ -80,13 +80,13 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	public Take_Exam_main() {
 	//public void main(){
 		//super();
-		try {
+		/*try {
 			System.setErr(new PrintStream(new FileOutputStream("errorLog.txt")));
 			//System.setOut(new PrintStream(new FileOutputStream("outputLog.txt")));
 		} catch (FileNotFoundException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
-		}
+		}*/
 		initialize();
 		this.setVisible(true);
 	}
@@ -279,6 +279,21 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		//JButton startB = new JButton("学習を始める");
 		startB = new JButton("学習を始める");
 		startB.setActionCommand("START10");
+		startB.addActionListener(this);
+		//qPanel.setSize(300, 400);
+		s.add(startB);
+		seqPanel.add(s);
+		
+		//シーケンスボタン11
+		//問題の自動生成のデフォルト値用
+		//公聴会用の一時的な追加
+		s = new JPanel();
+		//JLabel sLab = new JLabel("ポインタ");
+		sLab = new JLabel("デモ用");
+		s.add(sLab);
+		//JButton startB = new JButton("学習を始める");
+		startB = new JButton("学習を始める");
+		startB.setActionCommand("START11");
 		startB.addActionListener(this);
 		//qPanel.setSize(300, 400);
 		s.add(startB);
@@ -825,365 +840,88 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		
-	/*//ボタンの動作
-		if (e.getActionCommand() == "START1" ){
-			sec=0;
-			//ord = 1;
-			//seqence = "array";
-			//seqence = "struct";
-			seqence = "point1";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			
-			//System.out.println("stdate:"+stDate);
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("eddate:"+maxtime);
-			//System.out.println("startTime:"+sdf.format(stDate));
-			
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			
-			//System.out.println("user_name:"+user_name); 
-			//this.setContentPane(setQuestionPane(level,seqence));
-			this.setVisible(true);
-		}
-		if (e.getActionCommand() == "START2" ){
-			sec = 0;
-			//ord = 1;
-			seqence = "struct2";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-			
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
-		}
-		
-		if (e.getActionCommand() == "START3" ){
-			sec =0;
-			//ord = 1;
-			//seqence = "pointer";
-			seqence = "struct3";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
+	//ボタンの動作
 
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
-		}
-		
-		if (e.getActionCommand() == "START4" ){
-			sec =0;
-			//ord = 1;
-			//seqence = "pointer";
-			seqence = "pointer";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
+		if(e.getActionCommand()!=null){//下のif文がｎｕｌｌを受け付けないための応急処置（タイマーでnullの判定を行わないといけないよう）
+			if (e.getActionCommand().matches("START[0-9]+")){
+				System.out.println(e.getActionCommand());
+				sec=0;
+				//ord = 1;
 
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
+				if(e.getActionCommand() == "START1"){
+					seqence = "point1";
+				}
+				if(e.getActionCommand() == "START2"){
+					seqence = "struct2";
+				}
+				if(e.getActionCommand() == "START3"){
+					seqence = "struct3";
+				}
+				if(e.getActionCommand() == "START4"){
+					seqence = "pointer";
+				}
+				if(e.getActionCommand() == "START5"){
+					seqence = "pointer2";
+				}
+				if(e.getActionCommand() == "START6"){
+					seqence = "pointer3";
+				}
+				if(e.getActionCommand() == "START7"){
+					seqence = "point11";
+				}
+				if(e.getActionCommand() == "START8"){
+					seqence = "point21";
+				}
+				if(e.getActionCommand() == "START9"){
+					seqence = "point12";
+				}
+				if(e.getActionCommand() == "START10"){
+					//System.out.println("load");
+					seqence = "point22";
+				}
+				if(e.getActionCommand() == "START11"){
+					seqence = "test_set001";
+				}
 			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
+				this.setContentPane(setQuestionPane(level,seqence));
+				//時間取得
+				Calendar now = Calendar.getInstance(); //インスタンス化
+			
+				//int Y = now.get(now.YEAR);
+				//int M = now.get(now.MONTH);//月の値を0~11で取得
+				//M = M+1;//1~12にするために１を加算
+				//int D = now.get(now.DATE);
+				//int h = now.get(now.HOUR_OF_DAY);//時を取得
+				//int m = now.get(now.MINUTE);     //分を取得
+				//int s = now.get(now.SECOND);      //秒を取得
+				//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
 			
 			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
+				//開始時間の取得
+				//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+				stDate = new java.sql.Timestamp(now.getTimeInMillis());
+				
+				//System.out.println("stdate:"+stDate);
+				max = Integer.parseInt(QL.max_time.get(0).toString());
+				maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
+				//System.out.println("eddate:"+maxtime);
+				//System.out.println("startTime:"+sdf.format(stDate));
 			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
+				//System.out.println("startTime:"+startTime);
+			
+				//ユーザ名の取得
+				user_name = get_user_name.getText();
+			
+				//System.out.println("user_name:"+user_name); 
+				//this.setContentPane(setQuestionPane(level,seqence));
+				this.setVisible(true);
+			
+			}
 		}
 		
-		if (e.getActionCommand() == "START5" ){
-			sec =0;
-			//ord = 1;
-			//seqence = "pointer";
-			seqence = "pointer2";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
-		}
 		
-		if (e.getActionCommand() == "START6" ){
-			sec =0;
-			//ord = 1;
-			//seqence = "pointer";
-			seqence = "pointer3";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
-		}*/
 		
-		if (e.getActionCommand() == "START7" ){
-			sec=0;
-			//ord = 1;
-			//seqence = "array";
-			//seqence = "struct";
-			seqence = "point11";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			
-			//System.out.println("stdate:"+stDate);
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("eddate:"+maxtime);
-			//System.out.println("startTime:"+sdf.format(stDate));
-			
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			
-			//System.out.println("user_name:"+user_name); 
-			//this.setContentPane(setQuestionPane(level,seqence));
-			this.setVisible(true);
-		}
-		if (e.getActionCommand() == "START8" ){
-			sec = 0;
-			//ord = 1;
-			seqence = "point21";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-			
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
-		}
-		
-		if (e.getActionCommand() == "START9" ){
-			sec =0;
-			//ord = 1;
-			//seqence = "pointer";
-			seqence = "point12";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
-		}
-		
-		if (e.getActionCommand() == "START10" ){
-			sec =0;
-			//ord = 1;
-			//seqence = "pointer";
-			seqence = "point22";
-			//this.setContentPane(setQuestionPane(level,"test_set"));
-			this.setContentPane(setQuestionPane(level,seqence));
-
-			//時間取得
-			Calendar now = Calendar.getInstance(); //インスタンス化
-			
-			//int Y = now.get(now.YEAR);
-			//int M = now.get(now.MONTH);//月の値を0~11で取得
-			//M = M+1;//1~12にするために１を加算
-			//int D = now.get(now.DATE);
-			//int h = now.get(now.HOUR_OF_DAY);//時を取得
-			//int m = now.get(now.MINUTE);     //分を取得
-			//int s = now.get(now.SECOND);      //秒を取得
-			//startTime = Y+"-"+M+"-"+D+" "+h+":"+m+":"+s;
-			
-			
-			//開始時間の取得
-			//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-			stDate = new java.sql.Timestamp(now.getTimeInMillis());
-			//System.out.println("startTime:"+sdf.format(stDate));
-			max = Integer.parseInt(QL.max_time.get(0).toString());
-			maxtime = new java.sql.Timestamp(now.getTimeInMillis()+max*1000);
-			//System.out.println("startTime:"+startTime);
-			
-			//ユーザ名の取得
-			user_name = get_user_name.getText();
-			//System.out.println("user_name:"+user_name); 
-			this.setVisible(true);
-		}
-		
+		//----------学習開始以外のボタン------------
 		if (e.getActionCommand() == "ANSWER" ){
 			timer.stop();
 			getAns = new ArrayList();
@@ -1271,19 +1009,20 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			this.setVisible(true);
 		}
 		
+		
 		//-----------------------------------------------
 		time.setText("制限時間："+max+"sec 経過時間："+ sec + " sec");
-
+	
 	    if (sec >= max){
-	      timer.stop();
-	      ArrayList getAns = new ArrayList();
-	      getAns.add("TIMEUP");
-	      this.setContentPane(giveupPane(Integer.parseInt(QL.qID.get(0).toString()),seqence,getAns));
-	      this.setVisible(true);
+		      timer.stop();
+		      ArrayList getAns = new ArrayList();
+		      getAns.add("TIMEUP");
+		      this.setContentPane(giveupPane(Integer.parseInt(QL.qID.get(0).toString()),seqence,getAns));
+		      this.setVisible(true);
 	    }else{
-	      sec++;
+	    	sec++;
 	    }
-	    //----------------------------------------------------------
+	    //----------------------------------------------------------	
 	}
 	
 }

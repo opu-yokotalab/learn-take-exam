@@ -121,7 +121,7 @@ public class question_load {
 	    //DBからの呼び出し
 	    String driver = "org.postgresql.Driver";
 	    //どこのDBに接続するかの判定(0:ローカル、1:emerald)
-	    int DB_C = 1;
+	    int DB_C = 0;
 
 	    //デフォルトはローカルホストへのアクセス
 	    String url = "jdbc:postgresql://127.0.0.1:5432/problem_DB";
@@ -299,10 +299,15 @@ public class question_load {
 		        // ドキュメントビルダーを生成
 		        DocumentBuilder parser = dbfactory.newDocumentBuilder();	           
 		        // パースを実行してDocumentオブジェクトを取得
-		        //ローカルDBのとき
-		        Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
-		        //Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        
+		        
+		        //emeraldにアクセスするとき
+		        //Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("Shift_JIS")));
+		        //ローカルにアクセスするとき
+		        Document doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
+		        
 		        if(DB_C == 0){
+		        	//ローカルDBのとき
 		        	doc = parser.parse(new ByteArrayInputStream(so.getBytes("UTF-8")));
 		        }
 		        if(DB_C == 1){
