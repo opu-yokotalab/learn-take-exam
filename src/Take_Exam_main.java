@@ -30,18 +30,19 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	public static WriteLog WL; //ログ書きこみ
 	
 	//デフォルトフォント
-	Font defFont = new Font("monospaced", Font.PLAIN, 16);
+	//Font defFont = new Font("monospaced", Font.PLAIN, 16);
+	Font defFont = new Font("monospaced", Font.BOLD, 16);
 	
 	//出題関係
 	JTextField[] answer = new JTextField[10];//回答欄
 	JTextField get_user_name = new JTextField(15);//ユーザーネーム取得欄
-	ArrayList getAns;  // 回答の格納先
+	ArrayList getAns;  // 回答の格納先  //  @jve:decl-index=0:
 	String user_name = new String();  // ユーザ名の格納先  //  @jve:decl-index=0:
 	String nextQuestion;
 	int nextID;
 	int ord; //何問目か
 	int small_ord;
-	int max_ord = 7;
+	int max_ord = 7;//全出題数
 	int level = 1; //レベル
 	int max_level = 3;//最大レベル
 	ArrayList ready;  //  @jve:decl-index=0:
@@ -70,7 +71,7 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 	int max = 10;
 	java.sql.Timestamp stDate;  //  問題の出題時間  //  @jve:decl-index=0:
 	java.sql.Timestamp maxtime;  //最大解答時間
-	java.sql.Timestamp endDate;  // 回答完了時間
+	java.sql.Timestamp endDate;  // 解答完了時間
 	java.sql.Timestamp startTime;
 	java.sql.Timestamp endTime;
 	java.sql.Timestamp takeTime;  //  @jve:decl-index=0:
@@ -322,14 +323,17 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		
 		//問題情報の提示
 		JLabel order = new JLabel ("第"+ord+"問目  ");
+		order.setFont(defFont);//demo
 		infoPanel.add(order);
 		//level = Integer.parseInt(QL.level.get(0).toString());
 		JLabel l = new JLabel("Level:"+level);
+		l.setFont(defFont);//demo
 		infoPanel.add(l);
 		//JLabel qid = new JLabel("問題ID："+QL.qID.get(0).toString());
 		//infoPanel.add(qid);
 		//JLabel ps = new JLabel("Program_set:"+QL.program_set.get(0).toString());
 		//infoPanel.add(ps);
+		time.setFont(defFont);//demo
 		infoPanel.add(time);
 		timer = new Timer(1000,this);
 		timer.start();
@@ -338,7 +342,8 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 		//問題文の配置
 		//System.out.println("question:"+QL.question.get(0).toString());
 		//JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
-		JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+		//JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+		JTextArea qTA = new JTextArea(27, 65);//問題文を提示（デモ用）
 		
 		//scrollpane.setLocation(0,0);
 		//scrollpane.setBounds(10,10,50,50);
@@ -436,16 +441,19 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 			int l = Integer.parseInt(QL.level.get(0).toString());
 			//問題情報の提示
 			JLabel order = new JLabel ("第"+ord+"問目  ");
+			order.setFont(defFont);//demo
 			infoPanel.add(order);
 			//JLabel l = new JLabel("Level:"+QL.level.get(0).toString());
 			JLabel lv = new JLabel("Level:"+l);
+			lv.setFont(defFont);//demo
 			infoPanel.add(lv);
 			
 			
 			//問題文の配置
 			//System.out.println("question:"+QL.question.get(0).toString());
 			//JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
-			JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+			//JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+			JTextArea qTA = new JTextArea(27, 65);//問題文を提示(demo)
 			
 			JScrollPane scrollpane = new JScrollPane(qTA);//スクロールバー
 			//scrollpane.setLocation(0,0);
@@ -682,7 +690,8 @@ public class Take_Exam_main extends JFrame implements ActionListener{
 				//問題文の配置
 				//System.out.println("question:"+QL.question.get(0).toString());
 				//JTextArea qTA = new JTextArea(QL.question.get(0).toString());//問題文を提示
-				JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+				//JTextArea qTA = new JTextArea(27, 80);//問題文を提示
+				JTextArea qTA = new JTextArea(27, 65);//問題文を提示(demo)
 				
 				JScrollPane scrollpane = new JScrollPane(qTA);//スクロールバー
 				//scrollpane.setLocation(0,0);
